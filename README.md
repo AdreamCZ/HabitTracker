@@ -39,34 +39,34 @@ A modern habit tracking application built with Next.js, TypeScript, and a powerf
 ### Prerequisites
 
 - Node.js 20+
-- npm or yarn
+- pnpm or yarn
 
 ### Installation
 
 1. Install dependencies:
    ```bash
-   npm install
+   pnpm install
    ```
 
 2. Environment variables are already set up in `.env.local`
 
 3. Run the development server:
    ```bash
-   npm run dev
+   pnpm run dev
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000)
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run db:generate` - Generate database migrations
-- `npm run db:migrate` - Run database migrations
-- `npm run db:push` - Push schema changes to database
-- `npm run db:studio` - Open Drizzle Studio
+- `pnpm run dev` - Start development server
+- `pnpm run build` - Build for production
+- `pnpm run start` - Start production server
+- `pnpm run lint` - Run ESLint
+- `pnpm run db:generate` - Generate database migrations
+- `pnpm run db:migrate` - Run database migrations
+- `pnpm run db:push` - Push schema changes to database
+- `pnpm run db:studio` - Open Drizzle Studio
 
 ## Database Setup
 
@@ -86,8 +86,8 @@ export const habits = sqliteTable('habits', {
 
 After defining your schema:
 ```bash
-npm run db:generate  # Generate migrations
-npm run db:push      # Apply to database
+pnpm run db:generate  # Generate migrations
+pnpm run db:push      # Apply to database
 ```
 
 ## Authentication
