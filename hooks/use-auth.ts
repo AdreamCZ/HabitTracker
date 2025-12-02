@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useSession } from '@/lib/auth/client';
+import { useSession } from "@/lib/auth/client";
 
-export function useAuth() {
+export const useAuth = () => {
   const { data: session, isPending, error } = useSession();
 
   return {
@@ -12,4 +12,4 @@ export function useAuth() {
     isAuthenticated: !!session,
     error,
   };
-}
+};

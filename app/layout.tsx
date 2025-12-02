@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import { QueryProvider } from "@/lib/query/provider";
 import "./globals.css";
 
@@ -18,18 +19,16 @@ export const metadata: Metadata = {
   description: "Track your habits and build better routines",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <QueryProvider>{children}</QueryProvider>
-      </body>
-    </html>
-  );
-}
+}>) => (
+  <html lang="en">
+    <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <QueryProvider>{children}</QueryProvider>
+    </body>
+  </html>
+);
+
+export default RootLayout;

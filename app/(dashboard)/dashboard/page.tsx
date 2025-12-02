@@ -1,12 +1,18 @@
-'use client';
+"use client";
 
-import { useSession, signOut } from '@/lib/auth/client';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useRouter } from "next/navigation";
 
-export default function DashboardPage() {
+import { useSession, signOut } from "@/lib/auth/client";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+const DashboardPage = () => {
   const { data: session, isPending } = useSession();
   const router = useRouter();
 
@@ -24,7 +30,7 @@ export default function DashboardPage() {
 
   const handleSignOut = async () => {
     await signOut();
-    router.push('/');
+    router.push("/");
     router.refresh();
   };
 
@@ -34,7 +40,9 @@ export default function DashboardPage() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">Welcome back, {session.user.name}!</p>
+            <p className="text-muted-foreground">
+              Welcome back, {session.user.name}!
+            </p>
           </div>
           <Button variant="outline" onClick={handleSignOut}>
             Sign Out
@@ -48,7 +56,9 @@ export default function DashboardPage() {
               <CardDescription>Track your daily habits</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground">No habits yet. Start by creating one!</p>
+              <p className="text-muted-foreground">
+                No habits yet. Start by creating one!
+              </p>
             </CardContent>
           </Card>
 
@@ -76,4 +86,6 @@ export default function DashboardPage() {
       </div>
     </div>
   );
-}
+};
+
+export default DashboardPage;

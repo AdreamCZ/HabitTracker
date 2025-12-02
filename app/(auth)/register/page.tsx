@@ -1,25 +1,32 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { signUp } from '@/lib/auth/client';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import Link from 'next/link';
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
-export default function RegisterPage() {
+import { signUp } from "@/lib/auth/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+
+const RegisterPage = () => {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
@@ -30,17 +37,20 @@ export default function RegisterPage() {
       });
 
       if (response.error) {
-        setError(response.error.message || 'Failed to create account. Please try again.');
+        setError(
+          response.error.message ??
+            "Failed to create account. Please try again.",
+        );
         setLoading(false);
         return;
       }
 
       // Successfully registered, redirect to dashboard
-      router.push('/dashboard');
+      router.push("/dashboard");
       router.refresh();
     } catch (err) {
-      setError('Failed to create account. Please try again.');
-      console.error('Registration error:', err);
+      setError("Failed to create account. Please try again.");
+      console.error("Registration error:", err);
       setLoading(false);
     }
   };
@@ -89,14 +99,12 @@ export default function RegisterPage() {
                 minLength={8}
               />
             </div>
-            {error && (
-              <p className="text-sm text-destructive">{error}</p>
-            )}
+            {error && <p className="text-sm text-destructive">{error}</p>}
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? "Creating account..." : "Create Account"}
             </Button>
             <p className="text-center text-sm text-muted-foreground">
-              Already have an account?{' '}
+              Already have an account?{" "}
               <Link href="/login" className="text-primary hover:underline">
                 Sign in
               </Link>
@@ -106,4 +114,6 @@ export default function RegisterPage() {
       </Card>
     </div>
   );
-}
+};
+
+export default RegisterPage;
