@@ -10,12 +10,6 @@ export default function DashboardPage() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
 
-  useEffect(() => {
-    if (!isPending && !session) {
-      router.push('/login');
-    }
-  }, [session, isPending, router]);
-
   if (isPending) {
     return (
       <div className="flex min-h-screen items-center justify-center">
