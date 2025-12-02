@@ -1,11 +1,11 @@
-import { drizzle } from "drizzle-orm/better-sqlite3";
-import Database from "better-sqlite3";
+import { drizzle } from "drizzle-orm/libsql";
+import { createClient } from "@libsql/client";
 
 import * as schema from "./schema/schema";
 
-const sqlite = new Database(process.env.DATABASE_URL ?? "./data/sqlite.db");
+const client = createClient({
+  url: process.env.DATABASE_URL!,
+  authToken: process.env.DATABASE_AUTH_TOKEN,
+});
 
-// Enable WAL mode for better concurrency
-sqlite.pragma("journal_mode = WAL");
-
-export const db = drizzle(sqlite, { schema });
+export const db = drizzle(client, { schema });

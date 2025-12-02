@@ -55,8 +55,8 @@ A modern habit tracking application built with Next.js, TypeScript, and a powerf
 
 3. Copy the example environment file and configure your environment variables:
    ```bash
-   cp .env.example .env.local
-   # Then edit .env.local to set the required values
+   cp .env.example .env
+   # Then edit .env to set the required values
    ```
    
 4. Run database migrations:
