@@ -47,7 +47,6 @@ const RegisterPage = () => {
 
       // Successfully registered, redirect to dashboard
       router.push("/dashboard");
-      router.refresh();
     } catch (err) {
       setError("Failed to create account. Please try again.");
       console.error("Registration error:", err);
