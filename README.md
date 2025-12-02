@@ -47,15 +47,29 @@ A modern habit tracking application built with Next.js, TypeScript, and a powerf
    ```bash
    pnpm install
    ```
+   
+2. Approve all required builds:
+   ```bash
+   pnpm approve-builds
+   ```
 
-2. Environment variables are already set up in `.env.local`
+3. Copy the example environment file and configure your environment variables:
+   ```bash
+   cp .env.example .env.local
+   # Then edit .env.local to set the required values
+   ```
+   
+4. Run database migrations:
+   ```bash
+   pnpm run db:push
+   ```
 
-3. Run the development server:
+5. Run the development server:
    ```bash
    pnpm run dev
    ```
 
-4. Open [http://localhost:3000](http://localhost:3000)
+6. Open [http://localhost:3000](http://localhost:3000)
 
 ## Available Scripts
 
@@ -70,29 +84,17 @@ A modern habit tracking application built with Next.js, TypeScript, and a powerf
 
 ## Database Setup
 
-The database schema is intentionally left empty in `lib/db/schema.ts`. Define your habit tracking schema there using Drizzle ORM.
+The database schemas can be defined in `lib/db/schema`.
 
-Example:
-```typescript
-import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-
-export const habits = sqliteTable('habits', {
-  id: integer('id').primaryKey(),
-  userId: text('user_id').notNull(),
-  name: text('name').notNull(),
-  createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-});
-```
-
-After defining your schema:
+After updating schema:
 ```bash
 pnpm run db:generate  # Generate migrations
-pnpm run db:push      # Apply to database
+pnpm run db:migrate  # Apply migrations
 ```
 
 ## Authentication
 
-BetterAuth is configured with email/password authentication. The auth tables will be automatically created when you first use the authentication system.
+BetterAuth is configured with email/password authentication.
 
 - **Login**: `/login`
 - **Register**: `/register`
@@ -106,10 +108,3 @@ BetterAuth is configured with email/password authentication. The auth tables wil
 - Responsive UI with Tailwind CSS
 - Type-safe database queries with Drizzle
 - shadcn/ui components
-
-## Next Steps
-
-1. Define your database schema in `lib/db/schema.ts`
-2. Create habit tracking components
-3. Build out the dashboard functionality
-4. Add API routes for habit CRUD operations
