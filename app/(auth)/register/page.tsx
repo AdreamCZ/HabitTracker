@@ -23,16 +23,24 @@ export default function RegisterPage() {
     setLoading(true);
 
     try {
-      await signUp.email({
+      const response = await signUp.email({
         email,
         password,
         name,
       });
+
+      if (response.error) {
+        setError(response.error.message || 'Failed to create account. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      // Successfully registered, redirect to dashboard
       router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError('Failed to create account. Please try again.');
       console.error('Registration error:', err);
-    } finally {
       setLoading(false);
     }
   };

@@ -2,12 +2,19 @@
 
 import { useSession, signOut } from '@/lib/auth/client';
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function DashboardPage() {
   const { data: session, isPending } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isPending && !session) {
+      router.push('/login');
+    }
+  }, [session, isPending, router]);
 
   if (isPending) {
     return (
@@ -18,13 +25,13 @@ export default function DashboardPage() {
   }
 
   if (!session) {
-    router.push('/login');
     return null;
   }
 
   const handleSignOut = async () => {
     await signOut();
     router.push('/');
+    router.refresh();
   };
 
   return (

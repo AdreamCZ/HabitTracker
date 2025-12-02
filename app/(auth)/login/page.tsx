@@ -22,15 +22,23 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      await signIn.email({
+      const response = await signIn.email({
         email,
         password,
       });
+
+      if (response.error) {
+        setError(response.error.message || 'Invalid email or password');
+        setLoading(false);
+        return;
+      }
+
+      // Successfully logged in, redirect to dashboard
       router.push('/dashboard');
+      router.refresh();
     } catch (err) {
       setError('Invalid email or password');
       console.error('Login error:', err);
-    } finally {
       setLoading(false);
     }
   };
