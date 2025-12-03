@@ -34,56 +34,53 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold">Dashboard</h1>
-            <p className="text-muted-foreground">
-              Welcome back, {session.user.name}!
-            </p>
-          </div>
-          <Button variant="outline" onClick={handleSignOut}>
-            Sign Out
-          </Button>
+    <>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold">Dashboard</h1>
+          <p className="text-muted-foreground">
+            Welcome back, {session.user.name}!
+          </p>
         </div>
-
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Your Habits</CardTitle>
-              <CardDescription>Track your daily habits</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                No habits yet. Start by creating one!
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Streak</CardTitle>
-              <CardDescription>Your current streak</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold">0</p>
-              <p className="text-sm text-muted-foreground">days</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Completion Rate</CardTitle>
-              <CardDescription>This week</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold">0%</p>
-            </CardContent>
-          </Card>
-        </div>
+        <Button variant="outline" onClick={handleSignOut}>
+          Sign Out
+        </Button>
       </div>
-    </div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        <Card>
+          <CardHeader>
+            <CardTitle>Your Habits</CardTitle>
+            <CardDescription>Track your daily habits</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">
+              No habits yet. Start by creating one!
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Streak</CardTitle>
+            <CardDescription>Your current streak</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold">0</p>
+            <p className="text-sm text-muted-foreground">days</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Completion Rate</CardTitle>
+            <CardDescription>This week</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-4xl font-bold">0%</p>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 
