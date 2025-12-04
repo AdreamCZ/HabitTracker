@@ -1,11 +1,12 @@
 "use client";
 
+import { useTransition } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
 
 import { type UserFormSchema, userFormSchema } from "@/schema/user";
-import { useUpdateUserMutation } from "@/modules/user/mutations";
+import { updateUser } from "@/app/(settings)/actions";
 import { FormTextField } from "@/components/form-fields/form-text-field";
 import { Button } from "@/components/ui/button";
 
@@ -20,7 +21,7 @@ export const UserUpdateForm = ({
   defaultName,
   defaultEmail,
 }: UserUpdateFormProps) => {
-  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<UserFormSchema>({
     resolver: zodResolver(userFormSchema),
@@ -30,14 +31,17 @@ export const UserUpdateForm = ({
     },
   });
 
-  const onSuccess = async () => {
-    router.refresh();
-  };
+  const onSubmit = async (data: UserFormSchema) => {
+    startTransition(async () => {
+      const result = await updateUser(userId, data);
 
-  const { mutate, isPending } = useUpdateUserMutation({ onSuccess });
-
-  const onSubmit = (data: UserFormSchema) => {
-    mutate({ id: userId, userFormData: data });
+      if (result.success) {
+        toast.success("Profile updated successfully");
+        form.reset(data);
+      } else {
+        toast.error(result.error ?? "Failed to update profile");
+      }
+    });
   };
 
   return (
