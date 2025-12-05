@@ -4,8 +4,9 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/lib/db";
-import { userHabit, habit } from "@/lib/db/schema/schema";
+import { userHabit, habit, type Habit } from "@/lib/db/schema/schema";
 import { getSession } from "@/lib/auth/session";
+import { getAllHabits } from "@/app/modules/habit/actions";
 
 import { getBadges } from "../badge/actions";
 
@@ -67,6 +68,31 @@ export const getUserHabits = async (): Promise<{
     console.error("Failed to fetch user habits:", error);
     return { success: false, error: "Failed to fetch user habits" };
   }
+};
+
+export const getHabitsUserDoesNotHave = async (): Promise<{
+  success: boolean;
+  data?: Habit[];
+  error?: string;
+}> => {
+  const currentUserHabits = await getUserHabits();
+  if (!currentUserHabits.success) {
+    return { success: false, error: currentUserHabits.error };
+  }
+
+  const allHabits = await getAllHabits();
+  if (!allHabits.success) {
+    return { success: false, error: allHabits.error };
+  }
+
+  const habitsUserDoesNotHave = allHabits.data!.filter(
+    (habit) =>
+      !currentUserHabits.data!.some(
+        (userHabit) => userHabit.habitId === habit.id,
+      ),
+  );
+
+  return { success: true, data: habitsUserDoesNotHave };
 };
 
 export const checkInHabit = async (userHabitId: string) => {
@@ -189,7 +215,7 @@ export const removeCheckInHabit = async (userHabitId: string) => {
   }
 };
 
-export const addNewUserHabit = async (habitId: string) => {
+export const addNewUserHabit = async (habitId: string, dailyCost?: string) => {
   const session = await getSession();
 
   if (!session?.user) {
@@ -202,6 +228,7 @@ export const addNewUserHabit = async (habitId: string) => {
       .values({
         userId: session.user.id,
         habitId,
+        dailyCost,
         streak: 0,
         daysCompleted: 0,
         lastCompleted: null,

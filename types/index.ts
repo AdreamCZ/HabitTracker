@@ -7,4 +7,9 @@ export type User = {
   createdAt: Date;
 };
 
+export type SelectOption = {
+  label: string;
+  value: string;
+};
+
 // Add more shared types as needed

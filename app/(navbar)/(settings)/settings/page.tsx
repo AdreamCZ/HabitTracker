@@ -7,8 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ManageHabitsCard } from "@/app/(navbar)/(settings)/components/manage-habits/manage-habits-card";
 
-import { ProfileSettingsCard } from "../components/profile-settings-card";
+import { ProfileSettingsCard } from "../components/profile-settings/profile-settings-card";
 
 const SettingsPage = () => {
   return (
@@ -31,6 +32,7 @@ const SettingsPage = () => {
         }
       >
         <ProfileSettingsCard />
+        <ManageHabitsCard />
       </Suspense>
     </>
   );

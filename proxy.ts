@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 
 import { auth } from "@/lib/auth";
 
+const PROTECTED_ROUTES = ["/dashboard", "/settings", "/checkin"];
+
 export const proxy = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
@@ -11,8 +13,9 @@ export const proxy = async (request: NextRequest) => {
   });
 
   // Protected routes
-  const isProtectedRoute =
-    pathname.startsWith("/dashboard") || pathname.startsWith("/checkin");
+  const isProtectedRoute = PROTECTED_ROUTES.some((route) =>
+    pathname.startsWith(route),
+  );
 
   // Auth routes (should redirect to dashboard if authenticated)
   const isAuthRoute =
