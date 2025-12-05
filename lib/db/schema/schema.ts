@@ -51,6 +51,6 @@ export const badge = sqliteTable("badge", {
   name: text("name").notNull(),
   streak: integer("streak").notNull(),
   icon: text("icon").notNull(),
-});
+}); // When adding a new badge the icon has to be added to the icon map in components/misc/badgeIcon.tsx
 
 export type Badge = InferSelectModel<typeof badge>;
