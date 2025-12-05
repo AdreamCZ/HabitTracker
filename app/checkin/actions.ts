@@ -102,7 +102,7 @@ export const checkInHabit = async (userHabitId: string) => {
 				previousLastCompleted: existingUserHabit.lastCompleted,
 			})
 			.where(
-				eq(userHabit.id, userHabitId) && eq(userHabit.userId, session.user.id),
+				eq(userHabit.id, userHabitId),
 			);
 
 		return { success: true, newStreak };
