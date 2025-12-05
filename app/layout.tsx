@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Toaster } from "sonner";
 
 import { QueryProvider } from "@/lib/query/provider";
 import "./globals.css";
@@ -27,7 +28,12 @@ const RootLayout = ({
 }>) => (
   <html lang="en">
     <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <QueryProvider>{children}</QueryProvider>
+      <div className="min-h-screen p-8">
+        <div className="max-w-4xl mx-auto">
+          <QueryProvider>{children}</QueryProvider>
+        </div>
+      </div>
+      <Toaster />
     </body>
   </html>
 );
