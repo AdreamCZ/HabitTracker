@@ -45,3 +45,12 @@ export const habitRelations = relations(habit, ({ many }) => ({
 export const userRelations = relations(user, ({ many }) => ({
   userHabits: many(userHabit),
 }));
+
+export const badge = sqliteTable("badge", {
+  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  streak: integer("streak").notNull(),
+  icon: text("icon").notNull(),
+});
+
+export type Badge = InferSelectModel<typeof badge>;
