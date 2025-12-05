@@ -7,12 +7,12 @@ import { checkInHabit, type UserHabitWithDetails } from "./actions";
 import { Card } from "@/components/ui/card";
 
 interface HabitCardProps {
-	habit: UserHabitWithDetails;
+	userHabit: UserHabitWithDetails;
 }
 
-export function HabitCard({ habit }: HabitCardProps) {
-	const [streak, setStreak] = useState(habit.streak);
-	const [lastCompleted, setLastCompleted] = useState(habit.lastCompleted);
+export function HabitCard({ userHabit }: HabitCardProps) {
+	const [streak, setStreak] = useState(userHabit.streak);
+	const [lastCompleted, setLastCompleted] = useState(userHabit.lastCompleted);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const isCheckedInToday = () => {
@@ -30,20 +30,9 @@ export function HabitCard({ habit }: HabitCardProps) {
 		if (isCheckedInToday() || isLoading) return;
 
 		setIsLoading(true);
-		// Optimistic update
-		const previousStreak = streak;
-		const previousLastCompleted = lastCompleted;
-
-		// Simple optimistic logic: if checked in yesterday, streak + 1, else 1
-		// This is a simplification, the server is the source of truth
-		// But for immediate feedback it's okay to just increment or set to 1 based on current streak
-		// Actually, let's just wait for the server response to be accurate, 
-		// or implement the same logic as server.
-		// For now, let's just set loading state.
-
 		try {
-			console.log("Check in on habit: ", habit.id);
-			const result = await checkInHabit(habit.id);
+			console.log("Check in on habit: ", userHabit.id);
+			const result = await checkInHabit(userHabit.id);
 			if (result.success && result.newStreak !== undefined) {
 				setStreak(result.newStreak);
 				setLastCompleted(new Date().toISOString());
@@ -73,7 +62,7 @@ export function HabitCard({ habit }: HabitCardProps) {
 		"bg-teal-500",
 	];
 	const colorIndex =
-		habit.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) %
+		userHabit.name.split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) %
 		colors.length;
 	const color = colors[colorIndex];
 
@@ -83,7 +72,7 @@ export function HabitCard({ habit }: HabitCardProps) {
 				<div className="flex-1">
 					<div className="flex items-center gap-3 mb-2">
 						<div className={`w-4 h-4 rounded-full ${color}`} />
-						<h3 className="text-xl font-bold text-foreground">{habit.name}</h3>
+						<h3 className="text-xl font-bold text-foreground">{userHabit.name}</h3>
 					</div>
 					<p className="text-sm text-muted-foreground">
 						Last logged:{" "}

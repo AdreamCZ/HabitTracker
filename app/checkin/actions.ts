@@ -8,6 +8,7 @@ import { getSession } from "@/lib/auth/session";
 
 export type UserHabitWithDetails = {
 	id: string;
+	habitId: string;
 	name: string;
 	daysCompleted: number;
 	streak: number;
@@ -28,7 +29,8 @@ export const getUserHabits = async (): Promise<{
 	try {
 		const userHabits = await db
 			.select({
-				id: habit.id,
+				id: userHabit.id,
+				habitId: habit.id,
 				name: habit.name,
 				daysCompleted: userHabit.daysCompleted,
 				streak: userHabit.streak,
@@ -45,7 +47,7 @@ export const getUserHabits = async (): Promise<{
 	}
 };
 
-export const checkInHabit = async (habitId: string) => {
+export const checkInHabit = async (userHabitId: string) => {
 	const session = await getSession();
 
 	if (!session?.user) {
@@ -57,7 +59,7 @@ export const checkInHabit = async (habitId: string) => {
 			.select()
 			.from(userHabit)
 			.where(
-				eq(userHabit.habitId, habitId) && eq(userHabit.userId, session.user.id),
+				eq(userHabit.id, userHabitId) && eq(userHabit.userId, session.user.id),
 			)
 			.limit(1);
 
@@ -100,7 +102,7 @@ export const checkInHabit = async (habitId: string) => {
 				previousLastCompleted: existingUserHabit.lastCompleted,
 			})
 			.where(
-				eq(userHabit.habitId, habitId) && eq(userHabit.userId, session.user.id),
+				eq(userHabit.id, userHabitId) && eq(userHabit.userId, session.user.id),
 			);
 
 		return { success: true, newStreak };

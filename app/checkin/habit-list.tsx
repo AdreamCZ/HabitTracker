@@ -1,3 +1,4 @@
+'use server';
 import { Plus } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { getUserHabits } from "./actions";
@@ -30,7 +31,7 @@ export async function HabitList() {
 	return (
 		<div className="space-y-4">
 			{habits.map((habit) => (
-				<HabitCard key={habit.id} habit={habit} />
+				<HabitCard key={habit.id} userHabit={habit} />
 			))}
 		</div>
 	);

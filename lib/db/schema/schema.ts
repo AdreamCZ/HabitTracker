@@ -13,7 +13,7 @@ export const habit = sqliteTable("habit", {
 export type Habit = InferSelectModel<typeof habit>;
 
 export const userHabit = sqliteTable("habit_user", {
-  userHabitId: text("user_habit_id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text("user_habit_id").primaryKey().$defaultFn(() => crypto.randomUUID()),
   habitId: text("habit_id").notNull().references(() => habit.id),
   userId: text("user_id").notNull().references(() => user.id),
   daysCompleted: integer("days_completed").notNull().default(0),
