@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import { type UserFormSchema, userFormSchema } from "@/schema/user";
-import { updateUser } from "@/app/(settings)/actions";
+import { updateUser } from "@/app/(navbar)/(settings)/actions";
 import { FormTextField } from "@/components/form-fields/form-text-field";
 import { Button } from "@/components/ui/button";
 

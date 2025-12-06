@@ -6,7 +6,7 @@ import { Suspense } from "react";
 import { Card } from "@/components/ui/card";
 import { getSession } from "@/lib/auth/session";
 
-import { getUserHabits } from "../modules/userHabit/actions";
+import { getUserHabits } from "../../../modules/userHabit/actions";
 
 import { HabitCard } from "./habit-card";
 import { BadgeProgress, BadgeProgressSkeleton } from "./badge-progress";

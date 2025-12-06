@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UserUpdateForm } from "@/app/(settings)/components/user-update-form";
+import { UserUpdateForm } from "@/app/(navbar)/(settings)/components/user-update-form";
 import { getSession } from "@/lib/auth/session";
 
 export const ProfileSettingsCard = async () => {
