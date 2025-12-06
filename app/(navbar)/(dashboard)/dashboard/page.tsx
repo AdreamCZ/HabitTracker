@@ -25,6 +25,7 @@ const DashboardPage = () => {
   }
 
   if (!session) {
+    router.push("/login");
     return null;
   }
 

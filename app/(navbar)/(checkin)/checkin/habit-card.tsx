@@ -9,7 +9,7 @@ import {
   checkInHabit,
   removeCheckInHabit,
   type UserHabitWithDetails,
-} from "../modules/userHabit/actions";
+} from "../../../modules/userHabit/actions";
 
 import { CheckinButton } from "./checkin-button";
 
