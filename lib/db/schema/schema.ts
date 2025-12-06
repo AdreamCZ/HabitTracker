@@ -1,25 +1,34 @@
-import { InferSelectModel, relations } from "drizzle-orm";
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { type InferSelectModel, relations } from "drizzle-orm";
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
 import { user } from "./auth-schema";
 
 // Re-export all schemas
 export * from "./auth-schema";
 
 export const habit = sqliteTable("habit", {
-  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
-  name: text("name").notNull()
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
 });
 
 export type Habit = InferSelectModel<typeof habit>;
 
 export const userHabit = sqliteTable("habit_user", {
-  id: text("user_habit_id").primaryKey().$defaultFn(() => crypto.randomUUID()),
-  habitId: text("habit_id").notNull().references(() => habit.id),
-  userId: text("user_id").notNull().references(() => user.id),
+  id: text("user_habit_id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  habitId: text("habit_id")
+    .notNull()
+    .references(() => habit.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => user.id),
   daysCompleted: integer("days_completed").notNull().default(0),
   streak: integer("streak").notNull().default(0),
-  lastCompleted: text("last_completed"), // ISO string
-  previousLastCompleted: text("previous_last_completed")
+  lastCompleted: text("last_completed"),
+  previousLastCompleted: text("previous_last_completed"),
 });
 //, (table) => ({
 //  pk: index("habit_user_pk").on(table.habitId, table.userId),
@@ -47,7 +56,9 @@ export const userRelations = relations(user, ({ many }) => ({
 }));
 
 export const badge = sqliteTable("badge", {
-  id: text("id").primaryKey().$defaultFn(() => crypto.randomUUID()),
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   name: text("name").notNull(),
   streak: integer("streak").notNull(),
   icon: text("icon").notNull(),
