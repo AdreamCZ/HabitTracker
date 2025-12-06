@@ -8,7 +8,8 @@ export const proxy = (request: NextRequest) => {
   const sessionToken = request.cookies.get("better-auth.session_token");
 
   // Protected routes
-  const isProtectedRoute = pathname.startsWith("/dashboard");
+  const isProtectedRoute =
+    pathname.startsWith("/dashboard") || pathname.startsWith("/checkin");
 
   // Auth routes (should redirect to dashboard if authenticated)
   const isAuthRoute =
