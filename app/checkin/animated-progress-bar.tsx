@@ -27,19 +27,15 @@ export const AnimatedProgressBar = ({
         return;
       }
 
-      // Check if streak increased and progress wrapped around (went from high to low)
-      // or just if streak increased and we want to show completion
       if (streak > prevStreak.current && progress < prevProgress.current) {
-        // 1. Animate to 100%
+        // If streak increased and progress wrapped around (went from high to low)
         await controls.start({
           width: "100%",
           transition: { duration: 0.5, ease: "easeOut" },
         });
 
-        // 2. Instant reset to 0%
         controls.set({ width: "0%" });
 
-        // 3. Animate to new progress
         await controls.start({
           width: `${progress}%`,
           transition: { duration: 0.5, ease: "easeOut" },
@@ -48,23 +44,20 @@ export const AnimatedProgressBar = ({
         streak < prevStreak.current &&
         progress > prevProgress.current
       ) {
-        // Backward wrap-around (lost a level)
-        // 1. Animate to 0%
+        // If streak decreased and progress wrapped around (went from low to high)
         await controls.start({
           width: "0%",
           transition: { duration: 0.5, ease: "easeOut" },
         });
 
-        // 2. Instant reset to 100%
         controls.set({ width: "100%" });
 
-        // 3. Animate to new progress
         await controls.start({
           width: `${progress}%`,
           transition: { duration: 0.5, ease: "easeOut" },
         });
       } else {
-        // Normal update
+        // If streak and progress both increased or both decreased
         controls.start({
           width: `${progress}%`,
           transition: { duration: 0.5, ease: "easeOut" },
