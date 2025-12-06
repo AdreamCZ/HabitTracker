@@ -28,11 +28,7 @@ const RootLayout = ({
 }>) => (
   <html lang="en">
     <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-      <div className="min-h-screen p-8">
-        <div className="max-w-4xl mx-auto">
-          <QueryProvider>{children}</QueryProvider>
-        </div>
-      </div>
+      <QueryProvider>{children}</QueryProvider>
       <Toaster />
     </body>
   </html>
