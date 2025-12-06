@@ -188,3 +188,30 @@ export const removeCheckInHabit = async (userHabitId: string) => {
     return { success: false, error: "Failed to check in" };
   }
 };
+
+export const addNewUserHabit = async (habitId: string) => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    await db
+      .insert(userHabit)
+      .values({
+        userId: session.user.id,
+        habitId,
+        streak: 0,
+        daysCompleted: 0,
+        lastCompleted: null,
+      })
+      .returning();
+
+    revalidatePath("/checkin");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to add new habit:", error);
+    return { success: false, error: "Failed to add new habit" };
+  }
+};
