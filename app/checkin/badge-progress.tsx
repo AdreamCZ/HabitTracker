@@ -3,44 +3,54 @@ import { BadgeIcon } from "@/components/ui/badgeIcon";
 
 import { getBadgeProgress } from "../modules/badge/actions";
 
+import { BadgeAnimator } from "./badge-animator";
+import { AnimatedProgressBar } from "./animated-progress-bar";
+
 export const BadgeProgress = async ({ streak }: { streak: number }) => {
   const { current, next } = await getBadgeProgress(streak);
 
-  const currentThreshold = current?.streak ?? 0;
+  //const currentThreshold = current?.streak ?? 0;
   const nextThreshold = next?.streak ?? 99999;
   const progress = Math.min(
     100,
     Math.max(
-      0,
-      ((streak - currentThreshold) / (nextThreshold - currentThreshold)) * 100,
+      5,
+      //((streak - currentThreshold) / (nextThreshold - currentThreshold)) * 100,
+      (streak / nextThreshold) * 100,
     ),
   );
 
   return (
     <div className="mt-2 pt-2">
       <div className="flex items-center justify-between mb-3">
-        <div className="flex flex-col items-center gap-1">
+        <BadgeAnimator badgeName={current?.name} streak={streak}>
           {current && (
             <BadgeIcon name={current.icon} className="text-3xl mb-1" />
           )}
           <p className="text-xs font-medium text-muted-foreground">
             {current?.name ?? ""}
           </p>
-        </div>
+        </BadgeAnimator>
         <div className="flex-1 mx-4 h-1 bg-secondary rounded-full overflow-hidden">
-          <div
-            className="bg-primary h-full rounded-full transition-all duration-500 ease-out"
-            style={{ width: `${progress}%` }}
-          />
+          <AnimatedProgressBar progress={progress} streak={streak} />
         </div>
-        <div className="flex flex-col items-center gap-1">
-          {next && (
-            <BadgeIcon name={next.icon} className="text-2xl opacity-40 mb-1" />
-          )}
-          <p className="text-xs font-medium text-muted-foreground">
-            {nextThreshold - streak}d away
-          </p>
-        </div>
+        <BadgeAnimator
+          badgeName={next?.name}
+          streak={streak}
+          enableConfetti={false}
+        >
+          <div className="flex flex-col items-center gap-1">
+            {next && (
+              <BadgeIcon
+                name={next.icon}
+                className="text-2xl opacity-40 mb-1"
+              />
+            )}
+            <p className="text-xs font-medium text-muted-foreground">
+              {nextThreshold - streak}d away
+            </p>
+          </div>
+        </BadgeAnimator>
       </div>
     </div>
   );

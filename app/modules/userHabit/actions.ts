@@ -72,8 +72,6 @@ export const getUserHabits = async (): Promise<{
 export const checkInHabit = async (userHabitId: string) => {
   const session = await getSession();
 
-  console.log("Checking in habit:", userHabitId);
-
   if (!session?.user) {
     return { success: false, error: "Unauthorized" };
   }
@@ -88,8 +86,6 @@ export const checkInHabit = async (userHabitId: string) => {
     if (!existingUserHabit) {
       return { success: false, error: "Habit not found" };
     }
-
-    console.log(existingUserHabit);
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -131,6 +127,62 @@ export const checkInHabit = async (userHabitId: string) => {
 
     revalidatePath("/checkin");
     return { success: true, newStreak };
+  } catch (error) {
+    console.error("Failed to check in:", error);
+    return { success: false, error: "Failed to check in" };
+  }
+};
+
+export const removeCheckInHabit = async (userHabitId: string) => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const [existingUserHabit] = await db
+      .select()
+      .from(userHabit)
+      .where(eq(userHabit.id, userHabitId))
+      .limit(1);
+
+    if (!existingUserHabit) {
+      return { success: false, error: "Habit not found" };
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const lastCompleted = existingUserHabit.lastCompleted
+      ? new Date(existingUserHabit.lastCompleted)
+      : null;
+
+    if (lastCompleted) {
+      lastCompleted.setHours(0, 0, 0, 0);
+      console.log(lastCompleted);
+      console.log(today);
+      if (lastCompleted.getTime() !== today.getTime()) {
+        return { success: false, error: "Didn't check in today" };
+      }
+    }
+
+    await db
+      .update(userHabit)
+      .set({
+        streak:
+          existingUserHabit.streak - 1 < 0 ? 0 : existingUserHabit.streak - 1,
+        daysCompleted: existingUserHabit.daysCompleted - 1,
+        lastCompleted: existingUserHabit.previousLastCompleted,
+      })
+      .where(eq(userHabit.id, userHabitId));
+
+    revalidatePath("/checkin");
+    return {
+      success: true,
+      newStreak:
+        existingUserHabit.streak - 1 < 0 ? 0 : existingUserHabit.streak - 1,
+      lastCompleted: existingUserHabit.previousLastCompleted,
+    };
   } catch (error) {
     console.error("Failed to check in:", error);
     return { success: false, error: "Failed to check in" };

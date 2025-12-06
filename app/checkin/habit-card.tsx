@@ -1,15 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { Check } from "lucide-react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Card } from "@/components/ui/card";
 
 import {
   checkInHabit,
+  removeCheckInHabit,
   type UserHabitWithDetails,
 } from "../modules/userHabit/actions";
+
+import { CheckinButton } from "./checkin-button";
 
 type HabitCardProps = {
   userHabit: UserHabitWithDetails;
@@ -20,42 +22,67 @@ export const HabitCard = ({ userHabit, badgeProgress }: HabitCardProps) => {
   const [streak, setStreak] = useState(userHabit.streak);
   const [lastCompleted, setLastCompleted] = useState(userHabit.lastCompleted);
   const [isLoading, setIsLoading] = useState(false);
+  const [isCheckedInToday, setIsCheckedInToday] = useState(false);
 
-  const isCheckedInToday = () => {
-    if (!lastCompleted) return false;
+  useEffect(() => {
+    if (!lastCompleted) {
+      setIsCheckedInToday(false);
+      return;
+    }
     const today = new Date();
     const last = new Date(lastCompleted);
-    return (
+    setIsCheckedInToday(
       today.getDate() === last.getDate() &&
-      today.getMonth() === last.getMonth() &&
-      today.getFullYear() === last.getFullYear()
+        today.getMonth() === last.getMonth() &&
+        today.getFullYear() === last.getFullYear(),
     );
-  };
+  }, [lastCompleted]);
 
   const handleCheckIn = async () => {
-    if (isCheckedInToday() || isLoading) return;
+    if (isLoading) return;
 
-    console.log("Checking in habit:", userHabit.id);
-
-    setIsLoading(true);
-    try {
-      const result = await checkInHabit(userHabit.id);
-      if (result.success && result.newStreak !== undefined) {
-        setStreak(result.newStreak);
-        setLastCompleted(new Date().toISOString());
-        toast.success("Checked in!");
-      } else {
-        toast.error(result.error ?? "Failed to check in");
+    if (!isCheckedInToday) {
+      setIsLoading(true);
+      try {
+        const result = await checkInHabit(userHabit.id);
+        if (result.success && result.newStreak !== undefined) {
+          setStreak(result.newStreak);
+          setLastCompleted(new Date().toISOString());
+          toast.success("Checked in!");
+        } else {
+          toast.error(result.error ?? "Failed to check in");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("An error occurred");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      console.error(error);
-      toast.error("An error occurred");
-    } finally {
-      setIsLoading(false);
+    } else {
+      setIsLoading(true);
+      try {
+        const result = await removeCheckInHabit(userHabit.id);
+        if (result.success && result.newStreak !== undefined) {
+          console.log(
+            "removed cehck in",
+            result.newStreak,
+            " ",
+            result.lastCompleted,
+          );
+          setStreak(result.newStreak);
+          setLastCompleted(result.lastCompleted);
+          toast.success("Removed check-in! :(");
+        } else {
+          toast.error(result.error ?? "Failed to remove check-in");
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error("An error occurred");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
-
-  const checkedIn = isCheckedInToday();
 
   // Generate a color based on the habit name or ID (consistent hashing)
   const colors = [
@@ -99,17 +126,11 @@ export const HabitCard = ({ userHabit, badgeProgress }: HabitCardProps) => {
           </p>
         </div>
 
-        <button
-          onClick={handleCheckIn}
-          disabled={checkedIn || isLoading}
-          className={`flex items-center justify-center w-16 h-16 rounded-full transition-colors shadow-lg hover:shadow-xl ${
-            checkedIn
-              ? "bg-green-500 text-white cursor-default"
-              : "bg-primary text-primary-foreground hover:bg-primary/90"
-          } ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
-        >
-          <Check className="w-8 h-8" />
-        </button>
+        <CheckinButton
+          checked={isCheckedInToday}
+          onCheck={handleCheckIn}
+          disabled={isLoading}
+        />
       </div>
 
       <div className="mt-4 pt-4 border-t border-border">{badgeProgress}</div>
