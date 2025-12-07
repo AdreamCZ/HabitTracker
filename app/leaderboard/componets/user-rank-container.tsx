@@ -10,9 +10,11 @@ import { UserRankCard } from "./user-rank";
 export const UserRankContainer = ({
   selectedHabit,
   sortBy,
+  followingOnly,
 }: {
   selectedHabit: string;
   sortBy: SortBy;
+  followingOnly: boolean;
 }) => {
   const { data: session, isPending: sessionLoading } = useSession();
   const [currentUserRank, setCurrentUserRank] =
@@ -28,7 +30,7 @@ export const UserRankContainer = ({
 
       try {
         const response = await fetch(
-          `/api/leaderboard/position?habit=${selectedHabit}&sortBy=${sortBy}`,
+          `/api/leaderboard/position?habit=${selectedHabit}&sortBy=${sortBy}&followingOnly=${followingOnly}`,
         );
 
         if (!response.ok) throw new Error("Failed to fetch");
@@ -46,11 +48,14 @@ export const UserRankContainer = ({
     if (!sessionLoading) {
       fetchData();
     }
-  }, [session, sessionLoading, selectedHabit, sortBy]);
+  }, [session, sessionLoading, selectedHabit, sortBy, followingOnly]);
 
   if (sessionLoading || loading || !session) return null;
 
   return currentUserRank ? (
-    <UserRankCard currentUserRank={currentUserRank} />
+    <UserRankCard
+      currentUserRank={currentUserRank}
+      amongFriends={followingOnly}
+    />
   ) : null;
 };

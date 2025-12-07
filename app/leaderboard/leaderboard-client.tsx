@@ -33,7 +33,7 @@ export const LeaderboardClient = ({
   const sortBy = (searchParams.get("sortBy") as SortBy) || initialSortBy;
   const followingFilter =
     (searchParams.get("following") as FollowingFilter) || "all";
-  const followingOnly = followingFilter === "following";
+  const followingOnly: boolean = followingFilter === "following";
 
   const handleHabitChange = (habitId: string) => {
     startTransition(() => {
@@ -75,7 +75,11 @@ export const LeaderboardClient = ({
         onFollowingOnlyChange={handleFollowingChange}
       />
 
-      <UserRankContainer selectedHabit={selectedHabit} sortBy={sortBy} />
+      <UserRankContainer
+        selectedHabit={selectedHabit}
+        sortBy={sortBy}
+        followingOnly={followingOnly}
+      />
 
       <LeaderboardList
         data={initialData}

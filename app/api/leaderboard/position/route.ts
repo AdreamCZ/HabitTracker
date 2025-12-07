@@ -17,10 +17,13 @@ export const GET = async (request: NextRequest) => {
   const { searchParams } = new URL(request.url);
   const habitIdParam = searchParams.get("habit");
   const sortByParam = searchParams.get("sortBy") ?? SortBy.Streak;
+  const followingOnlyParam = searchParams.get("followingOnly") ?? "false";
 
   const sortBy: SortBy = Object.values(SortBy).includes(sortByParam as SortBy)
     ? (sortByParam as SortBy)
     : SortBy.Streak;
+
+  const followingOnly = followingOnlyParam === "true";
 
   try {
     const allHabits = await getAllHabits();
@@ -36,6 +39,7 @@ export const GET = async (request: NextRequest) => {
       session.user.id,
       habitId,
       sortBy,
+      followingOnly,
     );
 
     return NextResponse.json(rank);

@@ -1,4 +1,4 @@
-import { eq, desc, inArray, and, gte } from "drizzle-orm";
+import { eq, desc, inArray, and, gte, or } from "drizzle-orm";
 import { cache } from "react";
 
 import {
@@ -135,15 +135,51 @@ export const getUserLeaderboardPosition = cache(
     userId: string,
     habitId: string,
     sortBy: SortBy = SortBy.Streak,
+    followingOnly: boolean = false,
   ): Promise<LeaderBoardPosition | null> => {
-    const allUsers = await db
+    const query = db
       .select({
         userId: user.id,
         value:
           sortBy === SortBy.Streak ? userHabit.streak : userHabit.daysCompleted,
       })
       .from(userHabit)
-      .innerJoin(user, eq(userHabit.userId, user.id))
+      .innerJoin(user, eq(userHabit.userId, user.id));
+
+    if (followingOnly) {
+      const allUsers = await query
+        .leftJoin(userFollower, eq(userFollower.followingId, userHabit.userId))
+        .where(
+          and(
+            eq(userHabit.habitId, habitId),
+            or(
+              eq(userFollower.followerId, userId),
+              eq(userHabit.userId, userId),
+            ),
+          ),
+        )
+        .orderBy(
+          desc(
+            sortBy === SortBy.Streak
+              ? userHabit.streak
+              : userHabit.daysCompleted,
+          ),
+        )
+        .all();
+
+      const position = allUsers.findIndex((u) => u.userId === userId);
+      if (position === -1) {
+        return null;
+      }
+
+      return {
+        position: position + 1,
+        total: allUsers.length,
+        value: allUsers[position].value,
+      };
+    }
+
+    const allUsers = await query
       .where(eq(userHabit.habitId, habitId))
       .orderBy(
         desc(
