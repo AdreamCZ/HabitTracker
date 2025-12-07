@@ -1,7 +1,7 @@
 // Run using: npx tsx lib/db/seed.ts
 import "dotenv/config";
 import { db } from "@/lib/db";
-import { habit, user, account, userHabit, badge } from "@/lib/db/schema/schema";
+import { habit, user, account, userHabit, badge, userFollower } from "@/lib/db/schema/schema";
 
 // Utility: insert safely (ignore duplicates)
 const safeInsert = async (table: any, values: any[]) => {
@@ -45,6 +45,46 @@ const seed = async () => {
     { id: "u18", name: "Jamal", email: "hamal@example.com" },
     { id: "u19", name: "Rebecka", email: "rebecka@example.com" },
     { id: "u20", name: "Twyla", email: "twyla@example.com" },
+  ]);
+
+  //
+  // FOLLOWS
+  //
+  await safeInsert(userFollower, [
+    { followerId: "u1", followingId: "u2" },
+    { followerId: "u1", followingId: "u3" },
+    { followerId: "u1", followingId: "u4" },
+
+    { followerId: "u2", followingId: "u1" },
+    { followerId: "u2", followingId: "u3" },
+    { followerId: "u2", followingId: "u5" },
+
+    { followerId: "u3", followingId: "u1" },
+    { followerId: "u3", followingId: "u2" },
+    { followerId: "u3", followingId: "u5" },
+
+    { followerId: "u4", followingId: "u1" },
+    { followerId: "u4", followingId: "u2" },
+    { followerId: "u4", followingId: "u3" },
+
+    { followerId: "u5", followingId: "u2" },
+    { followerId: "u5", followingId: "u3" },
+    { followerId: "u5", followingId: "u4" },
+
+    { followerId: "u6", followingId: "u1" },
+    { followerId: "u6", followingId: "u2" },
+
+    { followerId: "u7", followingId: "u3" },
+    { followerId: "u7", followingId: "u4" },
+
+    { followerId: "u8", followingId: "u5" },
+    { followerId: "u8", followingId: "u6" },
+
+    { followerId: "u9", followingId: "u7" },
+    { followerId: "u9", followingId: "u8" },
+
+    { followerId: "u10", followingId: "u9" },
+    { followerId: "u10", followingId: "u1" },
   ]);
 
   //
