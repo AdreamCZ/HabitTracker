@@ -27,7 +27,6 @@ export const UserRankContainer = ({
       }
 
       try {
-        // Volání API endpointu místo přímého volání DB
         const response = await fetch(
           `/api/leaderboard/position?habit=${selectedHabit}&sortBy=${sortBy}`,
         );

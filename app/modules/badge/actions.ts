@@ -20,7 +20,10 @@ export const getBadges = async (): Promise<{
   }
 };
 
-const getAllBadgesCached = unstable_cache(
+/**
+ * Returns all badges sorted by streak ASC
+ */
+export const getAllBadgesCached = unstable_cache(
   async () => {
     return await db.select().from(badge).orderBy(asc(badge.streak));
   },

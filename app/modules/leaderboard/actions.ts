@@ -5,11 +5,13 @@ import {
   type LeaderboardEntry,
   SortBy,
   type LeaderBoardPosition,
+  type LeaderboardEntryWithBadge,
 } from "@/types";
 
 import { db } from "../../../lib/db";
 import { user } from "../../../lib/db/schema/auth-schema";
-import { habit, userHabit } from "../../../lib/db/schema/schema";
+import { type Badge, habit, userHabit } from "../../../lib/db/schema/schema";
+import { getAllBadgesCached } from "../badge/actions";
 
 type LeaderboardFilters = {
   habitId?: string;
@@ -19,7 +21,7 @@ type LeaderboardFilters = {
   limit?: number;
 };
 
-export const getLeaderboard = cache(
+const getLeaderboard = cache(
   async (filters: LeaderboardFilters): Promise<LeaderboardEntry[]> => {
     const {
       habitId,
@@ -86,6 +88,30 @@ export const getLeaderboard = cache(
       .all();
 
     return results;
+  },
+);
+
+export const getLeaderboardWithBadges = cache(
+  async (filters: LeaderboardFilters): Promise<LeaderboardEntryWithBadge[]> => {
+    const leaderboard = await getLeaderboard(filters);
+
+    // Sorted ASC
+    const badges = await getAllBadgesCached();
+    console.assert(badges.length > 0, "⚠️ No badges loaded!");
+
+    return leaderboard.map((entry): LeaderboardEntryWithBadge => {
+      // matches highest badge or fallback to the lowest badge
+      const matchingBadge =
+        badges
+          .slice()
+          .reverse()
+          .find((b: Badge) => entry.streak >= b.streak) ?? badges[0];
+
+      return {
+        ...entry,
+        badge: matchingBadge,
+      };
+    });
   },
 );
 

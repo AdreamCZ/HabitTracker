@@ -1,5 +1,7 @@
 // Shared TypeScript types
 
+import { type Badge } from "@/lib/db/schema/schema";
+
 export type User = {
   id: string;
   name: string;
@@ -29,4 +31,9 @@ export type LeaderboardEntry = {
   streak: number;
   lastCompleted: string | null;
 };
+
+export type LeaderboardEntryWithBadge = LeaderboardEntry & {
+  badge: Badge;
+};
+
 // Add more shared types as needed

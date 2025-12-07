@@ -1,21 +1,9 @@
-import { type SortBy } from "@/types";
+import { type LeaderboardEntryWithBadge, type SortBy } from "@/types";
 
 import { LeaderboardEntryCard } from "./habit-leaderboard-card";
 
-type LeaderboardEntry = {
-  userId: string;
-  userName: string | null;
-  userEmail: string;
-  userImage?: string | null;
-  habitName: string;
-  habitId: string;
-  daysCompleted: number;
-  streak: number;
-  lastCompleted: string | null;
-};
-
 type LeaderboardListProps = {
-  data: LeaderboardEntry[];
+  data: LeaderboardEntryWithBadge[];
   selectedHabitName: string;
   sortBy: SortBy;
   isPending: boolean;

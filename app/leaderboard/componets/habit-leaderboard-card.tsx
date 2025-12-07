@@ -2,22 +2,11 @@ import { Trophy, Medal, Award, TrendingUp, Calendar } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import Avatar from "@/components/ui/avatar";
-import { SortBy } from "@/types";
-
-type LeaderboardEntry = {
-  userId: string;
-  userName: string | null;
-  userEmail: string;
-  userImage?: string | null;
-  habitName: string;
-  habitId: string;
-  daysCompleted: number;
-  streak: number;
-  lastCompleted: string | null;
-};
+import { type LeaderboardEntryWithBadge, SortBy } from "@/types";
+import { BadgeIcon } from "@/components/ui/badgeIcon";
 
 type LeaderboardEntryCardProps = {
-  entry: LeaderboardEntry;
+  entry: LeaderboardEntryWithBadge;
   rank: number;
   sortBy: SortBy;
 };
@@ -64,7 +53,7 @@ export const LeaderboardEntryCard = ({
             <h3 className="font-semibold text-gray-900 truncate">
               {entry.userName ?? entry.userEmail}
             </h3>
-
+            <BadgeIcon name={entry.badge.icon} className="text-3xl mb-1" />
             <p className="text-sm text-gray-500">
               {sortBy === SortBy.Streak ? (
                 <span className="text-gray-400">
