@@ -28,10 +28,7 @@ export const LeaderboardEntryCard = ({
     );
   };
 
-  const mainValue =
-    sortBy === SortBy.Streak ? entry.streak : entry.daysCompleted;
-  const secondaryValue =
-    sortBy === SortBy.Streak ? entry.daysCompleted : entry.streak;
+  const isStreakActive = sortBy === SortBy.Streak;
 
   return (
     <Card
@@ -54,31 +51,39 @@ export const LeaderboardEntryCard = ({
               {entry.userName ?? entry.userEmail}
             </h3>
             <BadgeIcon name={entry.badge.icon} className="text-3xl mb-1" />
-            <p className="text-sm text-gray-500">
-              {sortBy === SortBy.Streak ? (
-                <span className="text-gray-400">
-                  {secondaryValue} days total
-                </span>
-              ) : (
-                <span className="text-gray-400">
-                  {secondaryValue} day streak
-                </span>
-              )}
-            </p>
+            <div className="flex items-center gap-3 text-sm">
+              <span
+                className={
+                  !isStreakActive
+                    ? "text-gray-400"
+                    : "font-semibold text-orange-600"
+                }
+              >
+                {entry.streak} day streak
+              </span>{" "}
+              <span
+                className={
+                  isStreakActive
+                    ? "text-gray-400"
+                    : "font-semibold text-blue-600"
+                }
+              >
+                {entry.daysCompleted} days total
+              </span>
+            </div>
           </div>
 
           <div className="flex-shrink-0 text-right">
             <div className="flex items-center gap-1.5 text-2xl font-bold text-gray-900">
-              {sortBy === SortBy.Streak ? (
+              {isStreakActive ? (
                 <TrendingUp className="w-5 h-5 text-orange-500" />
               ) : (
                 <Calendar className="w-5 h-5 text-blue-500" />
               )}
-              {mainValue}
+              {isStreakActive ? entry.streak : entry.daysCompleted}
             </div>
-
             <p className="text-xs text-gray-500 mt-0.5">
-              {sortBy === SortBy.Streak ? "day streak" : "days total"}
+              {isStreakActive ? "day streak" : "days total"}
             </p>
           </div>
         </div>
