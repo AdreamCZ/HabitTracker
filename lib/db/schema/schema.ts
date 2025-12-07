@@ -16,7 +16,7 @@ export const habit = sqliteTable("habit", {
 export type Habit = InferSelectModel<typeof habit>;
 
 export const userHabit = sqliteTable("habit_user", {
-  id: text("user_habit_id")
+  id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   habitId: text("habit_id")
