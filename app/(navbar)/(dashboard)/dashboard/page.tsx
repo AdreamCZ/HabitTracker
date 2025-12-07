@@ -1,9 +1,7 @@
-"use client";
-
+import { Suspense } from "react";
 import { Clock, DollarSign, TrendingUp } from "lucide-react";
 import { redirect } from "next/navigation";
 
-import { useSession } from "@/lib/auth/client";
 import {
   Card,
   CardContent,
@@ -11,6 +9,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  MotivationBanner,
+  MotivationBannerSkeleton,
+} from "@/components/motivation/motivation-banner";
+import { getSession } from "@/lib/auth/session";
 
 const mockHabits = [
   { id: 1, name: "No Alcohol", streak: 127, goal: 10, total: 2540, icon: "🍷" },
@@ -33,22 +36,15 @@ const mockHabits = [
   },
 ];
 
-const DashboardPage = () => {
-  const { data: session, isPending } = useSession();
-  const totalSavings = mockHabits.reduce((sum, h) => sum + h.total, 0);
-  const longestStreak = Math.max(...mockHabits.map((h) => h.streak));
+const DashboardPage = async () => {
+  const session = await getSession();
 
-  if (isPending) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
-  if (!session) {
+  if (!session?.user) {
     redirect("/login");
   }
+
+  const totalSavings = mockHabits.reduce((sum, h) => sum + h.total, 0);
+  const longestStreak = Math.max(...mockHabits.map((h) => h.streak));
 
   return (
     <div className="px-4 md:px-6 py-8 space-y-8">
@@ -137,15 +133,9 @@ const DashboardPage = () => {
         </div>
       </Card>
 
-      {/*TODO - create a separate component for this*/}
-      <Card className="bg-green-50">
-        <CardHeader>
-          <CardTitle className="text-lg font-semibold text-foreground italic text-center">
-            &quot;Every day is a choice to be stronger than yesterday.
-            You&apos;ve got this.&quot;
-          </CardTitle>
-        </CardHeader>
-      </Card>
+      <Suspense fallback={<MotivationBannerSkeleton />}>
+        <MotivationBanner />
+      </Suspense>
     </div>
   );
 };

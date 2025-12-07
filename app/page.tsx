@@ -1,12 +1,15 @@
 import { Zap, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
+import { Suspense } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import {
+  MotivationBanner,
+  MotivationBannerSkeleton,
+} from "@/components/motivation/motivation-banner";
 
 const Home = () => {
-  const randomQuote = "You are stronger than you think.";
-
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
       <div className="max-w-2xl space-y-8 text-center">
@@ -19,11 +22,9 @@ const Home = () => {
           </p>
         </div>
 
-        <Card className="p-8 bg-green-50">
-          <p className="text-2xl md:text-3xl font-semibold italic leading-relaxed text-balance">
-            &quot;{randomQuote}&quot;
-          </p>
-        </Card>
+        <Suspense fallback={<MotivationBannerSkeleton />}>
+          <MotivationBanner />
+        </Suspense>
 
         <Button
           asChild
