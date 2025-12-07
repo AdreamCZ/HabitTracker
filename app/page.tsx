@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4">
-      <div className="max-w-2xl w-full space-y-8 text-center">
+      <div className="max-w-2xl space-y-8 text-center">
         <div className="space-y-2">
           <h1 className="text-5xl md:text-6xl font-bold text-primary">
             Legend
@@ -19,7 +19,7 @@ const Home = () => {
           </p>
         </div>
 
-        <Card className="p-8 bg-green-50 from-primary/10 to-accent/10 border-primary/30">
+        <Card className="p-8 bg-green-50">
           <p className="text-2xl md:text-3xl font-semibold italic leading-relaxed text-balance">
             &quot;{randomQuote}&quot;
           </p>
