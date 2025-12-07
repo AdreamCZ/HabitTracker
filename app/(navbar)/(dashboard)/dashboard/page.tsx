@@ -14,6 +14,7 @@ import {
   MotivationBannerSkeleton,
 } from "@/components/motivation/motivation-banner";
 import { getSession } from "@/lib/auth/session";
+import { SignOutButton } from "@/components/auth/sign-out-button";
 
 const mockHabits = [
   { id: 1, name: "No Alcohol", streak: 127, goal: 10, total: 2540, icon: "🍷" },
@@ -48,13 +49,16 @@ const DashboardPage = async () => {
 
   return (
     <div className="px-4 md:px-6 py-8 space-y-8">
-      <div>
-        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-          Welcome Back, {session.user.name}
-        </h2>
-        <p className="text-muted-foreground">
-          You&apos;re building a stronger you, one day at a time
-        </p>
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
+            Welcome Back, {session.user.name}
+          </h2>
+          <p className="text-muted-foreground">
+            You&apos;re building a stronger you, one day at a time
+          </p>
+        </div>
+        <SignOutButton />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
