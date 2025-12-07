@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { HabitsList } from "@/app/(navbar)/(settings)/components/manage-habits/habits-list/habits-list";
+import { UserHabitsList } from "@/app/(navbar)/(settings)/components/manage-habits/habits-list/user-habits-list";
 import { AddHabitSubCard } from "@/app/(navbar)/(settings)/components/manage-habits/add-habit-sub-card/add-habit-sub-card";
 
 export const ManageHabitsCard = async () => {
@@ -17,7 +17,7 @@ export const ManageHabitsCard = async () => {
       </CardHeader>
       <CardContent>
         <AddHabitSubCard />
-        <HabitsList />
+        <UserHabitsList />
       </CardContent>
     </Card>
   );

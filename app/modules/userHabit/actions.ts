@@ -13,6 +13,7 @@ import { getBadges } from "../badge/actions";
 export type UserHabitWithDetails = {
   id: string;
   habitId: string;
+  dailyCost: string | null;
   name: string;
   daysCompleted: number;
   streak: number;
@@ -38,6 +39,7 @@ export const getUserHabits = async (): Promise<{
         .select({
           id: userHabit.id,
           habitId: habit.id,
+          dailyCost: userHabit.dailyCost,
           name: habit.name,
           daysCompleted: userHabit.daysCompleted,
           streak: userHabit.streak,
@@ -215,12 +217,17 @@ export const removeCheckInHabit = async (userHabitId: string) => {
   }
 };
 
-export const addNewUserHabit = async (habitId: string, dailyCost?: string) => {
+export const addNewUserHabit = async (
+  habitId: string,
+  dailyCost?: string | null,
+) => {
   const session = await getSession();
 
   if (!session?.user) {
     return { success: false, error: "Unauthorized" };
   }
+
+  const nullifiedDailyCost = dailyCost === "" ? null : dailyCost;
 
   try {
     await db
@@ -228,7 +235,7 @@ export const addNewUserHabit = async (habitId: string, dailyCost?: string) => {
       .values({
         userId: session.user.id,
         habitId,
-        dailyCost,
+        dailyCost: nullifiedDailyCost,
         streak: 0,
         daysCompleted: 0,
         lastCompleted: null,
@@ -240,5 +247,82 @@ export const addNewUserHabit = async (habitId: string, dailyCost?: string) => {
   } catch (error) {
     console.error("Failed to add new habit:", error);
     return { success: false, error: "Failed to add new habit" };
+  }
+};
+
+export const updateUserHabit = async (
+  userHabitId: string,
+  dailyCost?: string | null,
+) => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const [existingUserHabit] = await db
+      .select()
+      .from(userHabit)
+      .where(eq(userHabit.id, userHabitId))
+      .limit(1);
+
+    if (!existingUserHabit) {
+      return { success: false, error: "Habit not found" };
+    }
+
+    if (existingUserHabit.userId !== session.user.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    const nullifiedDailyCost = dailyCost === "" ? null : dailyCost;
+
+    await db
+      .update(userHabit)
+      .set({
+        dailyCost: nullifiedDailyCost,
+      })
+      .where(eq(userHabit.id, userHabitId));
+
+    revalidatePath("/checkin");
+    revalidatePath("/settings");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update habit:", error);
+    return { success: false, error: "Failed to update habit" };
+  }
+};
+
+export const removeUserHabit = async (userHabitId: string) => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const [existingUserHabit] = await db
+      .select()
+      .from(userHabit)
+      .where(eq(userHabit.id, userHabitId))
+      .limit(1);
+
+    if (!existingUserHabit) {
+      return { success: false, error: "Habit not found" };
+    }
+
+    if (existingUserHabit.userId !== session.user.id) {
+      return { success: false, error: "Unauthorized" };
+    }
+
+    await db.delete(userHabit).where(eq(userHabit.id, userHabitId));
+
+    revalidatePath("/checkin");
+    revalidatePath("/settings");
+
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to remove habit:", error);
+    return { success: false, error: "Failed to remove habit" };
   }
 };
