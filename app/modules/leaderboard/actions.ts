@@ -1,4 +1,4 @@
-import { eq, desc, sql, inArray, and } from "drizzle-orm";
+import { eq, desc, inArray, and, gte } from "drizzle-orm";
 import { cache } from "react";
 
 import {
@@ -10,7 +10,12 @@ import {
 
 import { db } from "../../../lib/db";
 import { user } from "../../../lib/db/schema/auth-schema";
-import { type Badge, habit, userHabit } from "../../../lib/db/schema/schema";
+import {
+  type Badge,
+  habit,
+  userFollower,
+  userHabit,
+} from "../../../lib/db/schema/schema";
 import { getAllBadgesCached } from "../badge/actions";
 
 type LeaderboardFilters = {
@@ -31,7 +36,33 @@ const getLeaderboard = cache(
       limit = 10,
     } = filters;
 
-    let query = db
+    const conditions = [];
+
+    if (habitId) {
+      conditions.push(eq(habit.id, habitId));
+    }
+
+    if (minStreak && minStreak > 0) {
+      conditions.push(gte(userHabit.streak, minStreak));
+    }
+
+    if (userId) {
+      const following = await db
+        .select({ followingId: userFollower.followingId })
+        .from(userFollower)
+        .where(eq(userFollower.followerId, userId))
+        .all();
+
+      const followingIds = following.map((f) => f.followingId);
+
+      if (followingIds.length > 0) {
+        conditions.push(inArray(user.id, [...followingIds, userId]));
+      } else {
+        conditions.push(eq(user.id, userId));
+      }
+    }
+
+    const baseQuery = db
       .select({
         userId: user.id,
         userName: user.name,
@@ -47,42 +78,15 @@ const getLeaderboard = cache(
       .innerJoin(habit, eq(userHabit.habitId, habit.id))
       .innerJoin(user, eq(userHabit.userId, user.id));
 
-    const conditions = [];
-
-    if (habitId) {
-      conditions.push(eq(habit.id, habitId));
-    }
-
-    if (minStreak && minStreak > 0) {
-      conditions.push(sql`${userHabit.streak} >= ${minStreak}`);
-    }
-
-    if (userId) {
-      const friendships = await db
-        .select({ friendId: sql<string>`friend_id` })
-        .from(sql`friendships`)
-        .where(sql`user_id = ${userId}`)
-        .all();
-
-      const friendIds = friendships.map((f) => f.friendId);
-
-      if (friendIds.length > 0) {
-        conditions.push(inArray(user.id, [...friendIds, userId]));
-      } else {
-        conditions.push(eq(user.id, userId));
-      }
-    }
-
-    if (conditions.length > 0) {
-      query = query.where(and(...conditions)) as any;
-    }
+    const queryWithConditions =
+      conditions.length > 0 ? baseQuery.where(and(...conditions)) : baseQuery;
 
     const orderBy =
       sortBy === SortBy.Streak
         ? [desc(userHabit.streak), desc(userHabit.daysCompleted)]
         : [desc(userHabit.daysCompleted), desc(userHabit.streak)];
 
-    const results = await query
+    const results = await queryWithConditions
       .orderBy(...orderBy)
       .limit(limit)
       .all();

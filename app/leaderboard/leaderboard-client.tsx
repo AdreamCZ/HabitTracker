@@ -1,9 +1,12 @@
 "use client";
-
 import { useTransition } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { type LeaderboardEntryWithBadge, type SortBy } from "@/types";
+import {
+  type FollowingFilter,
+  type LeaderboardEntryWithBadge,
+  type SortBy,
+} from "@/types";
 
 import { LeaderboardFilters } from "./componets/leaderboard-filters";
 import { LeaderboardList } from "./componets/leaderboard-list";
@@ -28,6 +31,9 @@ export const LeaderboardClient = ({
 
   const selectedHabit = searchParams.get("habitId") ?? initialHabitId;
   const sortBy = (searchParams.get("sortBy") as SortBy) || initialSortBy;
+  const followingFilter =
+    (searchParams.get("following") as FollowingFilter) || "all";
+  const followingOnly = followingFilter === "following";
 
   const handleHabitChange = (habitId: string) => {
     startTransition(() => {
@@ -45,6 +51,14 @@ export const LeaderboardClient = ({
     });
   };
 
+  const handleFollowingChange = (newFollowingOnly: boolean) => {
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams);
+      params.set("following", newFollowingOnly ? "following" : "all");
+      router.push(`/leaderboard?${params.toString()}`);
+    });
+  };
+
   const selectedHabitName =
     habits.find((h) => h.id === selectedHabit)?.name ?? "";
 
@@ -54,9 +68,11 @@ export const LeaderboardClient = ({
         habits={habits}
         selectedHabit={selectedHabit}
         sortBy={sortBy}
+        followingOnly={followingOnly}
         isPending={isPending}
         onHabitChange={handleHabitChange}
         onSortChange={handleSortChange}
+        onFollowingOnlyChange={handleFollowingChange}
       />
 
       <UserRankContainer selectedHabit={selectedHabit} sortBy={sortBy} />

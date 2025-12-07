@@ -20,6 +20,8 @@ export enum SortBy {
   DaysCompleted = "daysCompleted",
 }
 
+export type FollowingFilter = "all" | "following";
+
 export type LeaderboardEntry = {
   userId: string;
   userName: string | null;
