@@ -4,7 +4,7 @@ import { getRandomQuote } from "@/app/modules/motivation/actions";
 
 export const dynamic = "force-dynamic";
 
-export const MotivationBanner = async () => {
+const MotivationBanner = async () => {
   const randomQuote = await getRandomQuote();
 
   return (
@@ -18,7 +18,7 @@ export const MotivationBanner = async () => {
   );
 };
 
-export const MotivationBannerSkeleton = () => {
+const MotivationBannerSkeleton = () => {
   return (
     <Card className="bg-green-50">
       <CardHeader>
@@ -29,3 +29,5 @@ export const MotivationBannerSkeleton = () => {
     </Card>
   );
 };
+
+export { MotivationBanner, MotivationBannerSkeleton };
