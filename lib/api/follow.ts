@@ -69,6 +69,7 @@ export const useFollowUser = () => {
     mutationFn: followUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-rank"] });
     },
   });
 };
@@ -80,6 +81,7 @@ export const useUnfollowUser = () => {
     mutationFn: unfollowUser,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["followings"] });
+      queryClient.invalidateQueries({ queryKey: ["user-rank"] });
     },
   });
 };

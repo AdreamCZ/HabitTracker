@@ -87,13 +87,12 @@ export const DELETE = async (request: NextRequest) => {
       );
     }
 
-    await unfollowUser(session.user.id, followingId);
-
     const unfollowedUser = await getUserById(followingId);
-
     if (!unfollowedUser) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    await unfollowUser(session.user.id, followingId);
 
     return NextResponse.json({
       message: `Successfully unfollowed ${unfollowedUser.name}`,

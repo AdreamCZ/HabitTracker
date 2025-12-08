@@ -8,7 +8,7 @@ export const LeaderboardHeader = () => {
         <span className="font-semibold text-gray-700">Global Leaderboard</span>
       </div>
       <h1 className="text-4xl font-bold text-gray-900 mb-2">Top Performers</h1>
-      <p className="text-gray-600">See whos crushing their habits!</p>
+      <p className="text-gray-600">See who is crushing their habits!</p>
     </div>
   );
 };

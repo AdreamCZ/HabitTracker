@@ -1,7 +1,6 @@
 // Run using: npx tsx lib/db/seed.ts
 import "dotenv/config";
 import { db } from "@/lib/db";
-
 import {
   habit,
   user,
@@ -51,7 +50,7 @@ const seed = async () => {
     { id: "u15", name: "Casi", email: "casi@example.com" },
     { id: "u16", name: "Viola", email: "viola@example.com" },
     { id: "u17", name: "Evin", email: "evin@example.com" },
-    { id: "u18", name: "Jamal", email: "hamal@example.com" },
+    { id: "u18", name: "Jamal", email: "jamal@example.com" },
     { id: "u19", name: "Rebecka", email: "rebecka@example.com" },
     { id: "u20", name: "Twyla", email: "twyla@example.com" },
   ]);
@@ -97,7 +96,7 @@ const seed = async () => {
   ]);
 
   //
-  // ACCOUNTS (stejné heslo pro všechny)
+  // ACCOUNTS (Same password for all test users)
   //
   await safeInsert(
     account,
@@ -118,7 +117,7 @@ const seed = async () => {
   //
   await safeInsert(habit, [
     { id: "h1", name: "No Smoking" },
-    { id: "h2", name: "No Alkohol" },
+    { id: "h2", name: "No Alcohol" },
     { id: "h3", name: "Exercise Daily" },
   ]);
 
@@ -193,7 +192,6 @@ const seed = async () => {
     { id: "uh40", habitId: "h1", userId: "u14", daysCompleted: 792, streak: 457, lastCompleted: yesterday, previousLastCompleted: twoDaysAgo },
   ]);
 
-  
   await safeInsert(quote, [
     {
       text: "Every day is a choice to be stronger than yesterday. You've got this.",

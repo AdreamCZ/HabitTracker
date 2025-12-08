@@ -2,7 +2,7 @@ import { getLeaderboardWithBadges } from "@/app/modules/leaderboard/actions";
 import { type FollowingFilter, SortBy } from "@/types";
 import { getSession } from "@/lib/auth/session";
 
-import { getAllHabits } from "../modules/userHabit/actions";
+import { getAllHabits } from "../modules/leaderboard/actions";
 
 import { LeaderboardClient } from "./leaderboard-client";
 import { BadgeMeaningsCard } from "./componets/badge-meanings";

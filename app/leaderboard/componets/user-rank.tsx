@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { type LeaderBoardPosition } from "@/types";
 
@@ -8,10 +6,10 @@ type UserRankCardProps = {
   amongFriends?: boolean;
 };
 
-export const UserRankCard: React.FC<UserRankCardProps> = ({
+export const UserRankCard = ({
   currentUserRank,
   amongFriends,
-}) => {
+}: UserRankCardProps) => {
   if (!currentUserRank) return null;
 
   return (

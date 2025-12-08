@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { getSession } from "@/lib/auth/session";
 import { getUserLeaderboardPosition } from "@/app/modules/leaderboard/actions";
-import { getAllHabits } from "@/app/modules/userHabit/actions";
+import { getAllHabits } from "@/app/modules/leaderboard/actions";
 import { SortBy } from "@/types";
 
 export const GET = async (request: NextRequest) => {
