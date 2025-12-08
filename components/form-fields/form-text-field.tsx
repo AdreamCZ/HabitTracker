@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 type FormTextFieldProps = HTMLProps<HTMLInputElement> & {
   name: string;
-  label: string;
+  label?: string;
 };
 
 /**
@@ -28,10 +28,9 @@ export const FormTextField = ({
 
   return (
     <div className="flex flex-col gap-2 mb-4">
-      <Label htmlFor={name}>{label}</Label>
+      {label && <Label htmlFor={name}>{label}</Label>}
 
       <Input
-        type="text"
         {...inputProps}
         {...register(name)}
         className={cn(inputProps.className, error && "border-destructive")}

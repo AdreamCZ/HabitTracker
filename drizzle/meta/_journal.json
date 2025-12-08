@@ -8,6 +8,20 @@
       "when": 1764715738303,
       "tag": "0000_tearful_reptil",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1765124470960,
+      "tag": "0001_spotty_hawkeye",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1765208051019,
+      "tag": "0002_goofy_dagger",
+      "breakpoints": true
     }
   ]
 }
