@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatDateRelatively } from "@/lib/formatting-utils";
+import { formatDateRelatively, formatPrice } from "@/lib/formatting-utils";
 
 import { UserHabitEditForm } from "./user-habit-edit-form";
 import { UserHabitDeleteDialog } from "./user-habit-delete-dialog";
@@ -32,7 +32,7 @@ export const UserHabitItemSubCard = ({ item }: UserHabitItemProps) => {
             <CardDescription>
               Last logged: {formatDateRelatively(item.lastCompleted)}
               {" · "}
-              Daily Cost: ${item.dailyCost ?? "0"}
+              Daily Cost: {formatPrice(item.dailyCost ?? 0)}
             </CardDescription>
           </div>
           <div className="flex gap-2">
@@ -58,8 +58,8 @@ export const UserHabitItemSubCard = ({ item }: UserHabitItemProps) => {
       {isEditing && (
         <UserHabitEditForm
           item={item}
-          onCancel={() => setIsEditing(false)}
-          onSuccess={() => setIsEditing(false)}
+          onCancelAction={() => setIsEditing(false)}
+          onSuccessAction={() => setIsEditing(false)}
         />
       )}
     </Card>

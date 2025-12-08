@@ -1,5 +1,5 @@
 import { type InferSelectModel, relations } from "drizzle-orm";
-import { numeric, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, real } from "drizzle-orm/sqlite-core";
 
 import { user } from "./auth-schema";
 
@@ -25,7 +25,7 @@ export const userHabit = sqliteTable("habit_user", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
-  dailyCost: numeric("daily_cost"),
+  dailyCost: real("daily_cost"),
   daysCompleted: integer("days_completed").notNull().default(0),
   streak: integer("streak").notNull().default(0),
   lastCompleted: text("last_completed"),

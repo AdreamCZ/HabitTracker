@@ -9,8 +9,7 @@ export const getAllHabits = async (): Promise<{
   try {
     const habits = await db.select().from(habit);
 
-    const mapped = habits.map((habit): Habit => habit as Habit);
-    return { success: true, data: mapped };
+    return { success: true, data: habits };
   } catch (error) {
     console.error("Failed to fetch habits:", error);
     return { success: false, error: "Failed to fetch habits" };

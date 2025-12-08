@@ -17,14 +17,14 @@ import {
 
 type UserHabitEditFormProps = {
   item: UserHabitWithDetails;
-  onCancel: () => void;
-  onSuccess: () => void;
+  onCancelAction: () => void;
+  onSuccessAction: () => void;
 };
 
 export const UserHabitEditForm = ({
   item,
-  onCancel,
-  onSuccess,
+  onCancelAction,
+  onSuccessAction,
 }: UserHabitEditFormProps) => {
   const [isPending, startTransition] = useTransition();
 
@@ -41,7 +41,7 @@ export const UserHabitEditForm = ({
 
       if (result.success) {
         toast.success("Habit updated successfully");
-        onSuccess();
+        onSuccessAction();
       } else {
         toast.error(result.error ?? "Failed to update habit");
       }
@@ -50,7 +50,7 @@ export const UserHabitEditForm = ({
 
   const handleCancel = () => {
     form.reset();
-    onCancel();
+    onCancelAction();
   };
 
   return (
@@ -62,7 +62,8 @@ export const UserHabitEditForm = ({
               <FormTextField
                 name="dailyCost"
                 placeholder="Daily Cost ($)"
-                type="string"
+                type="number"
+                step="any"
               />
             </div>
             <Button

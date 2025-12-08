@@ -28,7 +28,7 @@ export const FormTextField = ({
 
   return (
     <div className="flex flex-col gap-2 mb-4">
-      <Label htmlFor={name}>{label}</Label>
+      {label && <Label htmlFor={name}>{label}</Label>}
 
       <Input
         {...inputProps}

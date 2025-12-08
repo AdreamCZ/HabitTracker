@@ -38,7 +38,7 @@ export const FormSelectField = ({
 
   return (
     <div className="flex flex-col gap-2">
-      <Label htmlFor={name}>{label}</Label>
+      {label && <Label htmlFor={name}>{label}</Label>}
 
       <Select
         value={value ?? undefined}

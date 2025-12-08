@@ -13,7 +13,7 @@ import { getBadges } from "../badge/actions";
 export type UserHabitWithDetails = {
   id: string;
   habitId: string;
-  dailyCost: string | null;
+  dailyCost: number | null;
   name: string;
   daysCompleted: number;
   streak: number;
@@ -219,7 +219,7 @@ export const removeCheckInHabit = async (userHabitId: string) => {
 
 export const addNewUserHabit = async (
   habitId: string,
-  dailyCost?: string | null,
+  dailyCost: number | null,
 ) => {
   const session = await getSession();
 
@@ -227,15 +227,13 @@ export const addNewUserHabit = async (
     return { success: false, error: "Unauthorized" };
   }
 
-  const nullifiedDailyCost = dailyCost === "" ? null : dailyCost;
-
   try {
     await db
       .insert(userHabit)
       .values({
         userId: session.user.id,
         habitId,
-        dailyCost: nullifiedDailyCost,
+        dailyCost,
         streak: 0,
         daysCompleted: 0,
         lastCompleted: null,
@@ -252,7 +250,7 @@ export const addNewUserHabit = async (
 
 export const updateUserHabit = async (
   userHabitId: string,
-  dailyCost?: string | null,
+  dailyCost: number | null,
 ) => {
   const session = await getSession();
 
@@ -275,12 +273,10 @@ export const updateUserHabit = async (
       return { success: false, error: "Unauthorized" };
     }
 
-    const nullifiedDailyCost = dailyCost === "" ? null : dailyCost;
-
     await db
       .update(userHabit)
       .set({
-        dailyCost: nullifiedDailyCost,
+        dailyCost,
       })
       .where(eq(userHabit.id, userHabitId));
 

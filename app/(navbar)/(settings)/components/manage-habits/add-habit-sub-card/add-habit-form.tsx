@@ -32,7 +32,7 @@ export const AddHabitForm = ({ habitsUserDoesNotHave }: AddHabitFormProps) => {
     resolver: zodResolver(habitSettingsFormSchema),
     defaultValues: {
       name: "",
-      dailyCost: undefined,
+      dailyCost: null,
     },
   });
 
@@ -70,6 +70,7 @@ export const AddHabitForm = ({ habitsUserDoesNotHave }: AddHabitFormProps) => {
                 name="dailyCost"
                 placeholder="Daily Cost ($)"
                 type="number"
+                step="any"
               />
             </div>
             <Button
