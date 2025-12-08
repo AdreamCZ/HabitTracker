@@ -1,13 +1,24 @@
 "use server";
-import { Suspense } from "react";
-import { Plus } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Suspense } from "react";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+
+import { getSession } from "@/lib/auth/session";
+import { AddHabitButton } from "@/components/habit/add-habit-button";
 
 import { HabitList } from "./habit-list";
 import { HabitListSkeleton } from "./skeletons";
 
 const CheckinPage = async () => {
+  const session = await getSession();
+
+  if (!session) {
+    const cookieStore = await cookies();
+    cookieStore.delete("better-auth.session_token");
+    redirect("/login");
+  }
+
   return (
     <div className="max-w-3xl mx-auto px-4 md:px-6 py-8 space-y-8">
       <div className="flex items-center justify-between">
@@ -17,10 +28,7 @@ const CheckinPage = async () => {
             Did you crush your goals today?
           </p>
         </div>
-        <Button className="gap-2 bg-primary hover:bg-primary/90">
-          <Plus className="w-5 h-5" />
-          <span className="hidden sm:inline">Add Habit</span>
-        </Button>
+        <AddHabitButton />
       </div>
 
       <Suspense fallback={<HabitListSkeleton />}>
