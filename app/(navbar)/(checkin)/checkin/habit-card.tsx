@@ -4,12 +4,12 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Card } from "@/components/ui/card";
-
+import { formatDateRelatively } from "@/lib/formatting-utils";
 import {
   checkInHabit,
   removeCheckInHabit,
   type UserHabitWithDetails,
-} from "../modules/userHabit/actions";
+} from "@/app/modules/userHabit/actions";
 
 import { CheckinButton } from "./checkin-button";
 
@@ -112,10 +112,7 @@ export const HabitCard = ({ userHabit, badgeProgress }: HabitCardProps) => {
             </h3>
           </div>
           <p className="text-sm text-muted-foreground">
-            Last logged:{" "}
-            {lastCompleted
-              ? new Date(lastCompleted).toLocaleDateString("cs-CZ")
-              : "Never"}
+            Last logged: {formatDateRelatively(lastCompleted)}
           </p>
         </div>
 

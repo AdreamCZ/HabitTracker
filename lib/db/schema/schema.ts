@@ -4,6 +4,7 @@ import {
   primaryKey,
   sqliteTable,
   text,
+  real,
 } from "drizzle-orm/sqlite-core";
 
 import { user } from "./auth-schema";
@@ -30,6 +31,7 @@ export const userHabit = sqliteTable("habit_user", {
   userId: text("user_id")
     .notNull()
     .references(() => user.id),
+  dailyCost: real("daily_cost"),
   daysCompleted: integer("days_completed").notNull().default(0),
   streak: integer("streak").notNull().default(0),
   lastCompleted: text("last_completed"),
@@ -105,3 +107,12 @@ export const badge = sqliteTable("badge", {
 }); // When adding a new badge the icon has to be added to the icon map in components/misc/badgeIcon.tsx
 
 export type Badge = InferSelectModel<typeof badge>;
+
+export const quote = sqliteTable("quote", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  text: text("text").notNull(),
+});
+
+export type Quote = InferSelectModel<typeof quote>;

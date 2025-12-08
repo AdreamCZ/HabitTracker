@@ -38,4 +38,9 @@ export type LeaderboardEntryWithBadge = LeaderboardEntry & {
   badge: Badge;
 };
 
+export type SelectOption = {
+  label: string;
+  value: string;
+};
+
 // Add more shared types as needed

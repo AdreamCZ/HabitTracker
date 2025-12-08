@@ -5,8 +5,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UserUpdateForm } from "@/app/(settings)/components/user-update-form";
 import { getSession } from "@/lib/auth/session";
+import { UserUpdateForm } from "@/app/(navbar)/(settings)/components/profile-settings/user-update-form/user-update-form";
 
 export const ProfileSettingsCard = async () => {
   const session = await getSession();
@@ -16,7 +16,7 @@ export const ProfileSettingsCard = async () => {
   }
 
   return (
-    <Card>
+    <Card className="mb-10">
       <CardHeader>
         <CardTitle>Profile Settings</CardTitle>
         <CardDescription>

@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
 import { type UserFormSchema, userFormSchema } from "@/schema/user";
-import { updateUser } from "@/app/(settings)/actions";
+import { updateUser } from "@/app/modules/user/actions";
 import { FormTextField } from "@/components/form-fields/form-text-field";
 import { Button } from "@/components/ui/button";
 
@@ -48,7 +48,7 @@ export const UserUpdateForm = ({
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <div className="space-y-4">
-          <FormTextField name="name" label="Name" />
+          <FormTextField name="name" label="Name" type="text" />
           <FormTextField name="email" label="Email" type="email" />
         </div>
 

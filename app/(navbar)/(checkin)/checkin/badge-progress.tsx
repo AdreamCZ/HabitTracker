@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { BadgeIcon } from "@/components/ui/badgeIcon";
 
-import { getBadgeProgress } from "../modules/badge/actions";
+import { getBadgeProgress } from "../../../modules/badge/actions";
 
 import { BadgeAnimator } from "./badge-animator";
 import { AnimatedProgressBar } from "./animated-progress-bar";
