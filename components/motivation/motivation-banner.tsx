@@ -7,10 +7,6 @@ export const dynamic = "force-dynamic";
 export const MotivationBanner = async () => {
   const randomQuote = await getRandomQuote();
 
-  if (!randomQuote) {
-    return null;
-  }
-
   return (
     <Card className="bg-green-50">
       <CardHeader>
