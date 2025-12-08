@@ -380,3 +380,61 @@ export const getTotalSaved = async () => {
     return { success: false, error: "Failed to calculate total saved" };
   }
 };
+
+export type HabitSavings = {
+  id: string;
+  name: string;
+  dailySavings: number;
+  totalSavings: number;
+  percentageOfTotalOfAll: number;
+};
+
+export const getSavingsByHabit = async (): Promise<{
+  success: boolean;
+  data?: HabitSavings[];
+  error?: string;
+}> => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const userHabits = await getUserHabits();
+
+    if (!userHabits.success) {
+      return { success: false, error: userHabits.error };
+    }
+
+    const totalSaved = await getTotalSaved();
+
+    if (!totalSaved.success) {
+      return { success: false, error: totalSaved.error };
+    }
+
+    const totalSavedAmount = totalSaved.data!;
+
+    const mapped = userHabits.data!.map((habit) => {
+      const dailySavings = habit.dailyCost ?? 0;
+      const totalSavings = dailySavings * habit.daysCompleted;
+      const percentageOfTotalOfAll =
+        totalSavedAmount > 0 ? (totalSavings / totalSavedAmount) * 100 : 0;
+
+      return {
+        id: habit.id,
+        name: habit.name,
+        dailySavings,
+        totalSavings,
+        percentageOfTotalOfAll,
+      } as HabitSavings;
+    });
+
+    mapped.sort((a, b) => b.totalSavings - a.totalSavings);
+
+    return { success: true, data: mapped };
+  } catch (error) {
+    console.error("Failed to get savings by habit:", error);
+    return { success: false, error: "Failed to get savings by habit" };
+  }
+};
