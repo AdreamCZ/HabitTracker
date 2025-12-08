@@ -1,7 +1,14 @@
 // Run using: npx tsx lib/db/seed.ts
 import "dotenv/config";
 import { db } from "@/lib/db";
-import { habit, user, account, userHabit, badge } from "@/lib/db/schema/schema";
+import {
+  habit,
+  user,
+  account,
+  userHabit,
+  badge,
+  quote,
+} from "@/lib/db/schema/schema";
 
 const safeInsert = async (table: any, values: any) => {
   for (const value of values) {
@@ -133,6 +140,20 @@ const seed = async () => {
       streak: 1000,
       icon: "Crown",
     },
+  ]);
+
+  await safeInsert(quote, [
+    {
+      text: "Every day is a choice to be stronger than yesterday. You've got this.",
+    },
+    {
+      text: "Success is the sum of small efforts, repeated day in and day out.",
+    },
+    {
+      text: "The only limit to our realization of tomorrow will be our doubts of today.",
+    },
+    { text: "Don't watch the clock; do what it does. Keep going." },
+    { text: "Believe you can and you're halfway there." },
   ]);
 
   return;
