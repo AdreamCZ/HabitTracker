@@ -39,7 +39,7 @@ export const LeaderboardClient = ({
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
       params.set("habitId", habitId);
-      router.push(`/leaderboard?${params.toString()}`);
+      router.replace(`/leaderboard?${params.toString()}`, { scroll: false });
     });
   };
 
@@ -47,7 +47,7 @@ export const LeaderboardClient = ({
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
       params.set("sortBy", newSortBy);
-      router.push(`/leaderboard?${params.toString()}`);
+      router.replace(`/leaderboard?${params.toString()}`, { scroll: false });
     });
   };
 
@@ -55,7 +55,7 @@ export const LeaderboardClient = ({
     startTransition(() => {
       const params = new URLSearchParams(searchParams);
       params.set("following", newFollowingOnly ? "following" : "all");
-      router.push(`/leaderboard?${params.toString()}`);
+      router.replace(`/leaderboard?${params.toString()}`, { scroll: false });
     });
   };
 

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
+import { cache } from "react";
 
 import { db } from "@/lib/db";
 import { userHabit, habit } from "@/lib/db/schema/schema";
@@ -215,3 +216,14 @@ export const addNewUserHabit = async (habitId: string) => {
     return { success: false, error: "Failed to add new habit" };
   }
 };
+
+export const getAllHabits = cache(async () => {
+  return await db
+    .select({
+      id: habit.id,
+      name: habit.name,
+    })
+    .from(habit)
+    .orderBy(habit.name)
+    .all();
+});

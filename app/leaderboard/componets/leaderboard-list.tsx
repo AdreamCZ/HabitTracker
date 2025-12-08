@@ -1,4 +1,6 @@
+import { Skeleton } from "@/components/ui/skeleton";
 import { type LeaderboardEntryWithBadge, type SortBy } from "@/types";
+import { useFollowings } from "@/lib/api/follow";
 
 import { LeaderboardEntryCard } from "./habit-leaderboard-card";
 
@@ -15,6 +17,9 @@ export const LeaderboardList = ({
   sortBy,
   isPending,
 }: LeaderboardListProps) => {
+  const { data: followingIds = [], isLoading: isLoadingFollowings } =
+    useFollowings();
+
   return (
     <div className="bg-white rounded-xl shadow-lg p-6">
       <h2 className="text-xl font-bold text-gray-900 mb-4">
@@ -23,10 +28,7 @@ export const LeaderboardList = ({
       {isPending ? (
         <div className="space-y-3">
           {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className="h-20 bg-gray-100 rounded-lg animate-pulse"
-            />
+            <Skeleton key={i} className="h-20 rounded-lg" />
           ))}
         </div>
       ) : (
@@ -37,6 +39,8 @@ export const LeaderboardList = ({
               entry={entry}
               rank={index + 1}
               sortBy={sortBy}
+              followingIds={followingIds}
+              isLoadingFollowings={isLoadingFollowings}
             />
           ))}
         </div>

@@ -119,17 +119,6 @@ export const getLeaderboardWithBadges = cache(
   },
 );
 
-export const getAllHabits = cache(async () => {
-  return await db
-    .select({
-      id: habit.id,
-      name: habit.name,
-    })
-    .from(habit)
-    .orderBy(habit.name)
-    .all();
-});
-
 export const getUserLeaderboardPosition = cache(
   async (
     userId: string,

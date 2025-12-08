@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
-import { type SortBy, type LeaderBoardPosition } from "@/types";
-import { useSession } from "@/lib/auth/client";
+import { useUserRank } from "@/lib/api/leaderboard";
+import { type SortBy } from "@/types";
 
 import { UserRankCard } from "./user-rank";
 
@@ -16,46 +14,18 @@ export const UserRankContainer = ({
   sortBy: SortBy;
   followingOnly: boolean;
 }) => {
-  const { data: session, isPending: sessionLoading } = useSession();
-  const [currentUserRank, setCurrentUserRank] =
-    useState<LeaderBoardPosition | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { data: currentUserRank, isLoading } = useUserRank({
+    selectedHabit,
+    sortBy,
+    followingOnly,
+  });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!session?.user?.id) {
-        setLoading(false);
-        return;
-      }
+  if (isLoading || !currentUserRank) return null;
 
-      try {
-        const response = await fetch(
-          `/api/leaderboard/position?habit=${selectedHabit}&sortBy=${sortBy}&followingOnly=${followingOnly}`,
-        );
-
-        if (!response.ok) throw new Error("Failed to fetch");
-
-        const rank = await response.json();
-        setCurrentUserRank(rank);
-      } catch (error) {
-        console.error("Failed to fetch user rank:", error);
-        setCurrentUserRank(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (!sessionLoading) {
-      fetchData();
-    }
-  }, [session, sessionLoading, selectedHabit, sortBy, followingOnly]);
-
-  if (sessionLoading || loading || !session) return null;
-
-  return currentUserRank ? (
+  return (
     <UserRankCard
       currentUserRank={currentUserRank}
       amongFriends={followingOnly}
     />
-  ) : null;
+  );
 };
