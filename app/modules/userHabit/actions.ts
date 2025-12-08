@@ -1,7 +1,8 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
+import dayjs from "dayjs";
 
 import { db } from "@/lib/db";
 import { userHabit, habit, type Habit } from "@/lib/db/schema/schema";
@@ -320,5 +321,23 @@ export const removeUserHabit = async (userHabitId: string) => {
   } catch (error) {
     console.error("Failed to remove habit:", error);
     return { success: false, error: "Failed to remove habit" };
+  }
+};
+
+export const resetStreaks = async () => {
+  try {
+    const yesterday = dayjs().subtract(1, "day").format("YYYY-MM-DD");
+
+    await db
+      .update(userHabit)
+      .set({ streak: 0 })
+      .where(
+        and(
+          sql`${userHabit.streak} > 0`,
+          sql`date(${userHabit.lastCompleted}) < ${yesterday}`,
+        ),
+      );
+  } catch (error) {
+    console.error("[Cron] Error resetting streaks:", error);
   }
 };

@@ -17,9 +17,13 @@ import { addNewUserHabit } from "@/app/modules/userHabit/actions";
 
 type AddHabitFormProps = {
   habitsUserDoesNotHave: Habit[];
+  onSuccess?: () => void;
 };
 
-export const AddHabitForm = ({ habitsUserDoesNotHave }: AddHabitFormProps) => {
+export const AddHabitForm = ({
+  habitsUserDoesNotHave,
+  onSuccess,
+}: AddHabitFormProps) => {
   const [isPending, startTransition] = useTransition();
   const [formKey, setFormKey] = useState(0);
 
@@ -44,6 +48,7 @@ export const AddHabitForm = ({ habitsUserDoesNotHave }: AddHabitFormProps) => {
         toast.success("Habit added successfully");
         form.reset();
         setFormKey((prev) => prev + 1);
+        onSuccess?.();
       } else {
         toast.error(result.error ?? "Failed to add habit");
       }
