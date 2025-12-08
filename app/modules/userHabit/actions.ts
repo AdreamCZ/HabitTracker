@@ -156,6 +156,8 @@ export const checkInHabit = async (userHabitId: string) => {
       .where(eq(userHabit.id, userHabitId));
 
     revalidatePath("/checkin");
+    revalidatePath("/settings");
+    revalidatePath("/savings");
     return { success: true, newStreak };
   } catch (error) {
     console.error("Failed to check in:", error);
@@ -207,6 +209,9 @@ export const removeCheckInHabit = async (userHabitId: string) => {
       .where(eq(userHabit.id, userHabitId));
 
     revalidatePath("/checkin");
+    revalidatePath("/settings");
+    revalidatePath("/savings");
+
     return {
       success: true,
       newStreak:
@@ -243,6 +248,9 @@ export const addNewUserHabit = async (
       .returning();
 
     revalidatePath("/checkin");
+    revalidatePath("/settings");
+    revalidatePath("/savings");
+
     return { success: true };
   } catch (error) {
     console.error("Failed to add new habit:", error);
@@ -284,6 +292,8 @@ export const updateUserHabit = async (
 
     revalidatePath("/checkin");
     revalidatePath("/settings");
+    revalidatePath("/savings");
+
     return { success: true };
   } catch (error) {
     console.error("Failed to update habit:", error);
@@ -317,6 +327,7 @@ export const removeUserHabit = async (userHabitId: string) => {
 
     revalidatePath("/checkin");
     revalidatePath("/settings");
+    revalidatePath("/savings");
 
     return { success: true };
   } catch (error) {
@@ -340,5 +351,32 @@ export const resetStreaks = async () => {
       );
   } catch (error) {
     console.error("[Cron] Error resetting streaks:", error);
+  }
+};
+
+export const getTotalSaved = async () => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const userHabits = await getUserHabits();
+
+    if (!userHabits.success) {
+      return { success: false, error: userHabits.error };
+    }
+
+    const totalSaved = (userHabits.data ?? [])
+      .map((habit) => {
+        return (habit.dailyCost ?? 0) * habit.daysCompleted;
+      })
+      .reduce((a, b) => a + b, 0);
+
+    return { success: true, data: totalSaved };
+  } catch (error) {
+    console.error("Failed to calculate total saved:", error);
+    return { success: false, error: "Failed to calculate total saved" };
   }
 };
