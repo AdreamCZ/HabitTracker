@@ -15,7 +15,7 @@ export const HabitSavingsSubCard = ({
   habitSavings,
 }: HabitSavingsSubCardProps) => {
   return (
-    <Card className="bg-secondary/30">
+    <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>

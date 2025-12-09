@@ -9,6 +9,7 @@ import {
   badge,
   userFollower,
   quote,
+  whatYouCouldBuyItem,
 } from "@/lib/db/schema/schema";
 
 // Utility: insert safely (ignore duplicates)
@@ -204,6 +205,77 @@ const seed = async () => {
     },
     { text: "Don't watch the clock; do what it does. Keep going." },
     { text: "Believe you can and you're halfway there." },
+  ]);
+
+  await safeInsert(whatYouCouldBuyItem, [
+    {
+      name: "Premium Gym Membership (1 Year)",
+      price: 600.0,
+    },
+    {
+      name: "Claude Max 5x Subscription (1 Year)",
+      price: 1200.0,
+    },
+    {
+      name: "Vacation to Bali",
+      price: 1500.0,
+    },
+    {
+      name: "MacBook Air",
+      price: 1200,
+    },
+    {
+      name: "PlayStation 5",
+      price: 449.0,
+    },
+    {
+      name: "Smart Watch",
+      price: 400.0,
+    },
+    {
+      name: "Quality Mattress",
+      price: 800.0,
+    },
+    {
+      name: "Electric Bicycle",
+      price: 1200.0,
+    },
+    {
+      name: "Dinner for Two at a Fancy Restaurant",
+      price: 200.0,
+    },
+    {
+      name: "McDonald's Big Mac Meal",
+      price: 8.0,
+    },
+    {
+      name: "Cup of Coffee",
+      price: 3.0,
+    },
+    {
+      name: "Movie Ticket",
+      price: 12.0,
+    },
+    {
+      name: "Monthly Streaming Service Subscription",
+      price: 15.0,
+    },
+    {
+      name: "Monthly Public Transport Pass",
+      price: 31.0,
+    },
+    {
+      name: "Quality Pair of Running Shoes",
+      price: 50.0,
+    },
+    {
+      name: "High-Quality Headphones",
+      price: 100.0,
+    },
+    {
+      name: "Smartphone Upgrade",
+      price: 700.0,
+    },
   ]);
 
   console.log("Seeding complete!");

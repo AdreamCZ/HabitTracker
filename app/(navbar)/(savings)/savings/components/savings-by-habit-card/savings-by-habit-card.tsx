@@ -18,7 +18,7 @@ export const SavingsByHabitCard = async () => {
   const userHabitsBySavings = userHabitsBySavingsResponse.data!;
 
   return (
-    <Card>
+    <Card className="mb-10">
       <CardHeader>
         <CardTitle>Savings by Habit</CardTitle>
         <CardDescription>

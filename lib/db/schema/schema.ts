@@ -116,3 +116,13 @@ export const quote = sqliteTable("quote", {
 });
 
 export type Quote = InferSelectModel<typeof quote>;
+
+export const whatYouCouldBuyItem = sqliteTable("what_you_could_buy_item", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: text("name").notNull(),
+  price: real("price").notNull(),
+});
+
+export type WhatYouCouldBuyItem = InferSelectModel<typeof whatYouCouldBuyItem>;
