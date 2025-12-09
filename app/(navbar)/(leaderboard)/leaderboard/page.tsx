@@ -1,8 +1,9 @@
-import { getLeaderboardWithBadges } from "@/app/modules/leaderboard/actions";
+import {
+  getAllHabits,
+  getLeaderboardWithBadges,
+} from "@/app/modules/leaderboard/actions";
 import { type FollowingFilter, SortBy } from "@/types";
 import { getSession } from "@/lib/auth/session";
-
-import { getAllHabits } from "../modules/leaderboard/actions";
 
 import { LeaderboardClient } from "./leaderboard-client";
 import { BadgeMeaningsCard } from "./componets/badge-meanings";
@@ -37,7 +38,7 @@ const LeaderboardPage = async (props: PageProps) => {
   });
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto">
       <div className="max-w-3xl mx-auto">
         <LeaderboardHeader />
 
