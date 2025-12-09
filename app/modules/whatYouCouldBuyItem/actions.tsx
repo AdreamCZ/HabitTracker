@@ -27,7 +27,7 @@ export const getRandomWhatYouCouldBuyItemsWithDetails = async (): Promise<{
     };
   }
 
-  // Get user habits to calculate monthly savings rate
+  // Get user habits to calculate daily savings rate
   const userHabitsResponse = await getUserHabits();
 
   if (!userHabitsResponse.success) {
