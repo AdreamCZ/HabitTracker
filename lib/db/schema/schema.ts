@@ -1,5 +1,11 @@
 import { type InferSelectModel, relations } from "drizzle-orm";
-import { integer, sqliteTable, text, real } from "drizzle-orm/sqlite-core";
+import {
+  integer,
+  primaryKey,
+  sqliteTable,
+  text,
+  real,
+} from "drizzle-orm/sqlite-core";
 
 import { user } from "./auth-schema";
 
@@ -16,7 +22,7 @@ export const habit = sqliteTable("habit", {
 export type Habit = InferSelectModel<typeof habit>;
 
 export const userHabit = sqliteTable("habit_user", {
-  id: text("user_habit_id")
+  id: text("id")
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   habitId: text("habit_id")
@@ -52,8 +58,43 @@ export const habitRelations = relations(habit, ({ many }) => ({
   userHabits: many(userHabit),
 }));
 
+export const userFollower = sqliteTable(
+  "user_follower",
+  {
+    followerId: text("follower_id")
+      .notNull()
+      .references(() => user.id),
+    followingId: text("following_id")
+      .notNull()
+      .references(() => user.id),
+    createdAt: text("created_at")
+      .notNull()
+      .$defaultFn(() => new Date().toISOString()),
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.followerId, table.followingId] }),
+    };
+  },
+);
+
+export type UserFollower = InferSelectModel<typeof userFollower>;
+
+export const userFollowerRelations = relations(userFollower, ({ one }) => ({
+  follower: one(user, {
+    fields: [userFollower.followerId],
+    references: [user.id],
+  }),
+  following: one(user, {
+    fields: [userFollower.followingId],
+    references: [user.id],
+  }),
+}));
+
 export const userRelations = relations(user, ({ many }) => ({
   userHabits: many(userHabit),
+  followers: many(userFollower, { relationName: "followers" }),
+  following: many(userFollower, { relationName: "following" }),
 }));
 
 export const badge = sqliteTable("badge", {
