@@ -57,7 +57,7 @@ export const getRandomWhatYouCouldBuyItemsWithDetails = async (): Promise<{
       .orderBy(sql`RANDOM()`)
       .limit(6);
 
-    // Map to the return type with calculated monthsOfSaving
+    // Map to the return type with calculated daysOfSaving
     const itemsWithDetails: WhatYouCouldBuyItemWithDetails[] = randomItems.map(
       (item) => ({
         id: item.id,
