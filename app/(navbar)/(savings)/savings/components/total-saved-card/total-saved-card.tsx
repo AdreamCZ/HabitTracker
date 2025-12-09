@@ -19,7 +19,7 @@ export const TotalSavedCard = async () => {
         <div className="text-sm opacity-80">
           {totalSaved === 0
             ? "Start completing habits to save money!"
-            : "You're making a real financial impact on your recovery"}
+            : "You're making a real financial impact with your recovery"}
         </div>
       </CardContent>
     </Card>
