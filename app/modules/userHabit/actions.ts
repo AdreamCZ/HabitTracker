@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { and, eq, sql } from "drizzle-orm";
+import { and, count, desc, eq, sql } from "drizzle-orm";
 import dayjs from "dayjs";
 
 import { db } from "@/lib/db";
-import { userHabit, habit, type Habit } from "@/lib/db/schema/schema";
+import { habit, type Habit, userHabit } from "@/lib/db/schema/schema";
 import { getSession } from "@/lib/auth/session";
 import { getAllHabits } from "@/app/modules/habit/actions";
 
@@ -350,6 +350,53 @@ export const resetStreaks = async () => {
       );
   } catch (error) {
     console.error("[Cron] Error resetting streaks:", error);
+  }
+};
+
+export const getNumberOfActiveHabits = async () => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const userHabitsResult = await db
+      .select({ count: count() })
+      .from(userHabit)
+      .where(eq(userHabit.userId, session.user.id));
+
+    return { success: true, habitCount: userHabitsResult[0].count };
+  } catch (error) {
+    console.error("Failed to fetch user habits:", error);
+    return { success: false, error: "Failed to fetch user habits" };
+  }
+};
+
+export const getLongestStreak = async () => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const longestStreakResult = await db
+      .select({
+        streak: userHabit.streak,
+      })
+      .from(userHabit)
+      .where(eq(userHabit.userId, session.user.id))
+      .orderBy(desc(userHabit.streak))
+      .limit(1);
+
+    const longestStreak =
+      longestStreakResult.length > 0 ? longestStreakResult[0].streak : 0;
+
+    return { success: true, longestStreak };
+  } catch (error) {
+    console.error("Failed to fetch longest streak:", error);
+    return { success: false, error: "Failed to fetch longest streak" };
   }
 };
 

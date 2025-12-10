@@ -9,9 +9,9 @@ type LeaderboardFiltersProps = {
   sortBy: SortBy;
   followingOnly: boolean;
   isPending: boolean;
-  onHabitChange: (habitId: string) => void;
-  onSortChange: (sortBy: SortBy) => void;
-  onFollowingOnlyChange: (followingOnly: boolean) => void;
+  onHabitChange: (habitId: string) => void; // eslint-disable-line no-unused-vars
+  onSortChange: (sortBy: SortBy) => void; // eslint-disable-line no-unused-vars
+  onFollowingOnlyChange: (followingOnly: boolean) => void; // eslint-disable-line no-unused-vars
 };
 
 export const LeaderboardFilters = ({
