@@ -1,7 +1,7 @@
 type PillSelectorProps<T extends string> = {
   options: { value: T; label: string }[];
   value: T;
-  onChange: (value: T) => void;
+  onChange: (value: T) => void; // eslint-disable-line no-unused-vars
   disabled?: boolean;
 };
 

@@ -1,5 +1,3 @@
-import { Trophy } from "lucide-react";
-
 export const LeaderboardHeader = () => {
   return (
     <div className="mb-8">

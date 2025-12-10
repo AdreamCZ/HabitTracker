@@ -16,8 +16,8 @@ export type LeaderBoardPosition = {
 };
 
 export enum SortBy {
-  Streak = "streak",
-  DaysCompleted = "daysCompleted",
+  Streak = "streak", // eslint-disable-line no-unused-vars
+  DaysCompleted = "daysCompleted", // eslint-disable-line no-unused-vars
 }
 
 export type FollowingFilter = "all" | "following";

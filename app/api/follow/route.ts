@@ -8,7 +8,7 @@ import {
 } from "@/app/modules/follow/actions";
 import { getUserById } from "@/app/modules/user/actions";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
   const session = await getSession();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
