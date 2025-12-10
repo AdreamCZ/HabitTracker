@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { and, eq, sql } from "drizzle-orm";
-import { cache } from "react";
 import dayjs from "dayjs";
 
 import { db } from "@/lib/db";

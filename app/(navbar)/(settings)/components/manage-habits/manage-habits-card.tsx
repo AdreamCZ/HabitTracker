@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import {
   Card,
   CardContent,
@@ -5,10 +7,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { UserHabitsList } from "@/app/(navbar)/(settings)/components/manage-habits/habits-list/user-habits-list";
-import { AddHabitSubCard } from "@/app/(navbar)/(settings)/components/manage-habits/add-habit-sub-card/add-habit-sub-card";
+import {
+  UserHabitsList,
+  UserHabitsListSkeleton,
+} from "@/app/(navbar)/(settings)/components/manage-habits/habits-list/user-habits-list";
+import {
+  AddHabitSubCard,
+  AddHabitSubCardSkeleton,
+} from "@/app/(navbar)/(settings)/components/manage-habits/add-habit-sub-card/add-habit-sub-card";
 
-export const ManageHabitsCard = async () => {
+export const ManageHabitsCard = () => {
   return (
     <Card>
       <CardHeader>
@@ -16,8 +24,12 @@ export const ManageHabitsCard = async () => {
         <CardDescription>Update and delete your habits</CardDescription>
       </CardHeader>
       <CardContent>
-        <AddHabitSubCard />
-        <UserHabitsList />
+        <Suspense fallback={<AddHabitSubCardSkeleton />}>
+          <AddHabitSubCard />
+        </Suspense>
+        <Suspense fallback={<UserHabitsListSkeleton />}>
+          <UserHabitsList />
+        </Suspense>
       </CardContent>
     </Card>
   );
