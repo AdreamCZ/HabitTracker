@@ -22,12 +22,23 @@ export const formatDateRelatively = (
 export const formatPrice = (
   value: number | string,
   currency: string = "USD",
-  minimumFractionDigits: number = 2,
   maximumFractionDigits: number = 2,
+  minimumFractionDigits: number = 2,
 ) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
     currency,
+    minimumFractionDigits,
+    maximumFractionDigits,
+  }).format(value as number);
+};
+
+export const formatNumber = (
+  value: number | string,
+  maximumFractionDigits: number = 2,
+  minimumFractionDigits: number = 2,
+) => {
+  return new Intl.NumberFormat("en-US", {
     minimumFractionDigits,
     maximumFractionDigits,
   }).format(value as number);

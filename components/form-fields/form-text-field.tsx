@@ -27,7 +27,7 @@ export const FormTextField = ({
   const errorMessage = error?.message as string | undefined;
 
   return (
-    <div className="flex flex-col gap-2 mb-4">
+    <div className="flex flex-col gap-2">
       {label && <Label htmlFor={name}>{label}</Label>}
 
       <Input
