@@ -1,10 +1,10 @@
 import { DollarSign } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTotalSavings } from "@/app/modules/userHabit/actions";
+import { getTotalSaved } from "@/app/modules/userHabit/actions";
 
 const TotalSavingsStatCard = async () => {
-  const { success, totalSavings } = await getTotalSavings();
+  const { success, data: totalSavings } = await getTotalSaved();
 
   if (!success || !totalSavings) {
     return null;

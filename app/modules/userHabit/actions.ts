@@ -155,6 +155,8 @@ export const checkInHabit = async (userHabitId: string) => {
       .where(eq(userHabit.id, userHabitId));
 
     revalidatePath("/checkin");
+    revalidatePath("/settings");
+    revalidatePath("/savings");
     return { success: true, newStreak };
   } catch (error) {
     console.error("Failed to check in:", error);
@@ -206,6 +208,9 @@ export const removeCheckInHabit = async (userHabitId: string) => {
       .where(eq(userHabit.id, userHabitId));
 
     revalidatePath("/checkin");
+    revalidatePath("/settings");
+    revalidatePath("/savings");
+
     return {
       success: true,
       newStreak:
@@ -242,6 +247,9 @@ export const addNewUserHabit = async (
       .returning();
 
     revalidatePath("/checkin");
+    revalidatePath("/settings");
+    revalidatePath("/savings");
+
     return { success: true };
   } catch (error) {
     console.error("Failed to add new habit:", error);
@@ -283,6 +291,8 @@ export const updateUserHabit = async (
 
     revalidatePath("/checkin");
     revalidatePath("/settings");
+    revalidatePath("/savings");
+
     return { success: true };
   } catch (error) {
     console.error("Failed to update habit:", error);
@@ -316,6 +326,7 @@ export const removeUserHabit = async (userHabitId: string) => {
 
     revalidatePath("/checkin");
     revalidatePath("/settings");
+    revalidatePath("/savings");
 
     return { success: true };
   } catch (error) {
@@ -389,7 +400,7 @@ export const getLongestStreak = async () => {
   }
 };
 
-export const getTotalSavings = async () => {
+export const getTotalSaved = async () => {
   const session = await getSession();
 
   if (!session?.user) {
@@ -397,21 +408,79 @@ export const getTotalSavings = async () => {
   }
 
   try {
-    const savings = await db
-      .select({
-        daysCompleted: userHabit.daysCompleted,
-        dailyCost: userHabit.dailyCost,
-      })
-      .from(userHabit)
-      .where(eq(userHabit.userId, session.user.id));
+    const userHabits = await getUserHabits();
 
-    const totalSavings = savings
-      .map((s) => s.daysCompleted * (s.dailyCost ?? 0))
+    if (!userHabits.success) {
+      return { success: false, error: userHabits.error };
+    }
+
+    const totalSaved = (userHabits.data ?? [])
+      .map((habit) => {
+        return (habit.dailyCost ?? 0) * habit.daysCompleted;
+      })
       .reduce((a, b) => a + b, 0);
 
-    return { success: true, totalSavings };
+    return { success: true, data: totalSaved };
   } catch (error) {
-    console.error("Failed to fetch longest streak:", error);
-    return { success: false, error: "Failed to fetch longest streak" };
+    console.error("Failed to calculate total saved:", error);
+    return { success: false, error: "Failed to calculate total saved" };
+  }
+};
+
+export type HabitSavings = {
+  id: string;
+  name: string;
+  dailySavings: number;
+  totalSavings: number;
+  percentageOfTotalOfAll: number;
+};
+
+export const getSavingsByHabit = async (): Promise<{
+  success: boolean;
+  data?: HabitSavings[];
+  error?: string;
+}> => {
+  const session = await getSession();
+
+  if (!session?.user) {
+    return { success: false, error: "Unauthorized" };
+  }
+
+  try {
+    const userHabits = await getUserHabits();
+
+    if (!userHabits.success) {
+      return { success: false, error: userHabits.error };
+    }
+
+    const totalSaved = await getTotalSaved();
+
+    if (!totalSaved.success) {
+      return { success: false, error: totalSaved.error };
+    }
+
+    const totalSavedAmount = totalSaved.data!;
+
+    const mapped = userHabits.data!.map((habit) => {
+      const dailySavings = habit.dailyCost ?? 0;
+      const totalSavings = dailySavings * habit.daysCompleted;
+      const percentageOfTotalOfAll =
+        totalSavedAmount > 0 ? (totalSavings / totalSavedAmount) * 100 : 0;
+
+      return {
+        id: habit.id,
+        name: habit.name,
+        dailySavings,
+        totalSavings,
+        percentageOfTotalOfAll,
+      } as HabitSavings;
+    });
+
+    mapped.sort((a, b) => b.totalSavings - a.totalSavings);
+
+    return { success: true, data: mapped };
+  } catch (error) {
+    console.error("Failed to get savings by habit:", error);
+    return { success: false, error: "Failed to get savings by habit" };
   }
 };
