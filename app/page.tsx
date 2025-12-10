@@ -15,7 +15,7 @@ const Home = () => {
       <div className="max-w-2xl space-y-8 text-center">
         <div className="space-y-2">
           <h1 className="text-5xl md:text-6xl font-bold text-primary">
-            Legend
+            Habit Tracker
           </h1>
           <p className="text-lg text-muted-foreground">
             Build better habits, reclaim your life
